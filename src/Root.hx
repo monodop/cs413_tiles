@@ -51,6 +51,7 @@ class Root extends Sprite {
 		//assets.enqueue("assets/spritesheets/spritesheet.xml");
 		
 		assets.enqueue("assets/test_ship.png");
+		assets.enqueue("assets/point.png");
 			
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {

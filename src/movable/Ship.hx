@@ -18,6 +18,9 @@ class Ship extends SimpleMovable {
 		this.maxAngle = maxAngle;
 	}
 	
+	public function getGoToX():Float{ return gotoX; }
+	public function getGoToY():Float{ return gotoY; }
+	
 	public function goTo(x:Float,y:Float){
 		gotoX = x;
 		gotoY = y;

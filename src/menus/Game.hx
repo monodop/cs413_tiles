@@ -18,14 +18,26 @@ class Game extends MenuState {
 	
 	private var debugMouse:Image;
 	private var playerShip:Ship;
+	private var pointImage:Image;
 	
 	override function init() {
 		rootSprite.addChild(this);
+		
 		playerShip = new Ship(Root.assets.getTexture("test_ship"));
 		playerShip.setVelocity(2,2);
 		playerShip.setMaxAngle(Math.PI/124);
 		playerShip.goTo(this.stage.stageWidth/2,this.stage.stageHeight/2);
+		
+		pointImage = new Image(Root.assets.getTexture("point"));
+		pointImage.width = pointImage.height = 5;
+		pointImage.pivotX = pointImage.width/2.0;
+		pointImage.pivotY = pointImage.height/2.0;
+		pointImage.x = playerShip.getGoToX();
+		pointImage.y = playerShip.getGoToY();
+		
+				
 		addChild(playerShip);
+		addChild(pointImage);
 	}
 	
 	override function awake() {
@@ -45,6 +57,8 @@ class Game extends MenuState {
 		var touch:Touch = event.touches[0];
 		if(touch.phase == "ended"){
 			playerShip.goTo(touch.globalX,touch.globalY);
+			pointImage.x = touch.globalX;
+			pointImage.y = touch.globalY;
 		}
 	}
 	
