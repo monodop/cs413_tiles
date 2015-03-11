@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalong="no"?>
+<application xmlns="http://ns.adobe.com/air/application/3.8">
+  <id>com.cs413.pirategame</id>
+  <name>PirateGame</name>
+  <filename>pirategame</filename>
+  <versionNumber>15.03.10</versionNumber>
+  <initialWindow>
+    <content>game.swf</content>
+    <renderMode>direct</renderMode>
+    <autoOrients>false</autoOrients>
+    <aspectRatio>portrait</aspectRatio>
+  </initialWindow>
+</application>
