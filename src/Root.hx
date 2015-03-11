@@ -49,11 +49,14 @@ class Root extends Sprite {
 		assets = new AssetManager();
 		//assets.enqueue("assets/spritesheets/spritesheet.png");
 		//assets.enqueue("assets/spritesheets/spritesheet.xml");
+		
+		assets.enqueue("assets/test_ship.png");
 			
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {
 				startup.removeChild(startup.loadingBitmap);
-				var menu = new Main(rootSprite);
+				var menu = new Game(rootSprite);
+				Starling.current.stage.addEventListener(TouchEvent.TOUCH, menu.onTouch);
 				menu.start();
 			}
 		});

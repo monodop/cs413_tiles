@@ -1,22 +1,31 @@
 package menus;
 
-import game.ai.Cannon;
-import game.Board;
-import game.Player;
 import starling.core.Starling;
 import starling.display.Image;
+
+import starling.events.Touch;
+import starling.events.TouchEvent;
 import starling.events.EnterFrameEvent;
+
 import utility.ControlManager.ControlAction;
+import movable.SimpleMovable;
+import movable.Ship;
 
 class Game extends MenuState {
-	
-	private var board:Board;
+	/* The 'perfect' update time, used to modify velocities in case
+	   the game is not quite running at $frameRate */
+	static var perfectDeltaTime : Float = 1/60;
 	
 	private var debugMouse:Image;
+	private var playerShip:Ship;
 	
 	override function init() {
-		
 		rootSprite.addChild(this);
+		playerShip = new Ship(Root.assets.getTexture("test_ship"));
+		playerShip.setVelocity(2,2);
+		playerShip.setMaxAngle(Math.PI/124);
+		playerShip.goTo(this.stage.stageWidth/2,this.stage.stageHeight/2);
+		addChild(playerShip);
 	}
 	
 	override function awake() {
@@ -32,10 +41,20 @@ class Game extends MenuState {
 		this.dispose();
 	}
 	
+	public function onTouch( event:TouchEvent ){
+		var touch:Touch = event.touches[0];
+		if(touch.phase == "ended"){
+			playerShip.goTo(touch.globalX,touch.globalY);
+		}
+	}
+	
 	function enterFrame(event:EnterFrameEvent) {
-		//var mouse = Root.controls.getMousePos();
+		var mouse = Root.controls.getMousePos();
 		//debugMouse.x = mouse.x;
 		//debugMouse.y = mouse.y;
+		
+		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
+		playerShip.applyVelocity(modifier);
 	}
 	
 	override function transitionIn(?callback:Void->Void) { callback(); }

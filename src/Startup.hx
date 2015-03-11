@@ -3,6 +3,7 @@ import flash.display.Sprite;
 import flash.geom.Rectangle;
 import starling.core.Starling;
 import utility.Stats;
+import movable.SimpleMovable;
 
 @:bitmap("assets/loadingimage.png")
 class LoadingBitmapData extends flash.display.BitmapData {}
@@ -44,10 +45,11 @@ class Startup extends Sprite {
         mStarling.addEventListener(starling.events.Event.ROOT_CREATED,
 		    onRootCreated);
 		
+		/* Debug statistics
 		var stats = new Stats();
 		stats.scaleX = 1.5;
 		stats.scaleY = 1.5;
-		addChild(stats);
+		addChild(stats); */
     }
 
     static function main() {
