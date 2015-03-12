@@ -40,7 +40,8 @@ class Root extends Sprite {
 		controls.registerAction("down", Keyboard.S);
 		controls.bindKey("down", Keyboard.DOWN);
 		
-		controls.registerAction("space", Keyboard.SPACE);
+		controls.registerAction("hold", Keyboard.SPACE);
+		controls.registerAction("break", Keyboard.Z);
 		
 		Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, controls.keyDown);
 		Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, controls.keyUp);

@@ -66,10 +66,15 @@ class Game extends MenuState {
 	
 	function enterFrame(event:EnterFrameEvent) {
 		var mouse = Root.controls.getMousePos();
-		//debugMouse.x = mouse.x;
-		//debugMouse.y = mouse.y;
-		if(Root.controls.isDown("space"))
-			playerShip.setArrived(true);
+
+		if(Root.controls.isDown("break")){
+			playerShip.stopMovement();
+		}
+		
+		if(Root.controls.isDown("hold")){
+			playerShip.holdSpeed();
+		}
+		
 		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
 		playerShip.applyVelocity(modifier);
 	}

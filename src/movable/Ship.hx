@@ -13,6 +13,7 @@ class Ship extends SimpleMovable {
 	private var gotoX:Float;					// X coordinate to go to
 	private var gotoY:Float;					// Y coordinate to go to 
 	private var arrived:Bool = false;			// Whether or not we got to the point
+	private var normalMove:Bool = false;		// If set to true, the boat will continue like a normal SimpleMovable object
 	private var prevDistFromPoint:Float = 0;	// The previous distance from the point (to prevent infinite circling)
 	private var movingTowardsPoint:Bool = true; // Whether or not we are moving towards the point;
 	
@@ -45,9 +46,15 @@ class Ship extends SimpleMovable {
 		this.maxSpeed = maxSpeed;
 	}
 	
-	/** See variable description */
-	public function setArrived(arrived:Bool){ 
-		this.arrived = arrived; 
+	/** Stops the boat from moving, starts slowing down */
+	public function stopMovement(){ 
+		this.arrived = true;
+		this.normalMove = false;
+	}
+	
+	/** Makes the boat continue in the direction it is currently going */
+	public function holdSpeed(){
+		this.normalMove = true;
 	}
 	
 	/** See variable description */
@@ -60,9 +67,8 @@ class Ship extends SimpleMovable {
 	public function goTo(x:Float,y:Float){
 		gotoX = x;
 		gotoY = y;
-		arrived = false;
 		prevDistFromPoint = distanceFromDest();
-		movingTowardsPoint = false;
+		movingTowardsPoint = arrived = normalMove = false;
 		
 		var thisVector:Vector;
 		
@@ -81,7 +87,11 @@ class Ship extends SimpleMovable {
 	}
 	
 	/** Overriden version of the normal apply velocity, navigates towards a point */
-	public override function applyVelocity(modifier:Float = 1.0):Bool{	
+	public override function applyVelocity(modifier:Float = 1.0):Bool{
+		if(normalMove) {
+			return super.applyVelocity(modifier);
+		}
+		
 		var distFromPoint = distanceFromDest();
 		
 		/* If we have arrived, decelerate the boat
