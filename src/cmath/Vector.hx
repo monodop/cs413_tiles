@@ -25,6 +25,11 @@ class Vector {
 		return new Vector(x2-x1,y2-y1);
 	}
 	
+	/** Returns a normal vector from an angle */
+	public static function getVectorFromAngle(radians:Float){
+		return new Vector(Math.cos(radians), Math.sin(radians));
+	}
+	
 	/** Creates an identical instance of this object */
 	public function clone() : Vector{
 		return new Vector(vx,vy);

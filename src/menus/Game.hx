@@ -23,9 +23,12 @@ class Game extends MenuState {
 	override function init() {
 		rootSprite.addChild(this);
 		
-		playerShip = new Ship(Root.assets.getTexture("test_ship"));
-		playerShip.setVelocity(2,2);
-		playerShip.setMaxAngle(Math.PI/124);
+		// {texture, maxSpeed, maxAngle}
+		playerShip = new Ship(Root.assets.getTexture("test_ship"), 4, Math.PI/124);
+		playerShip.setBreakPower(0.980);
+		playerShip.setBoatAcceleration(0.025);
+		playerShip.turnFix = false;
+		
 		playerShip.goTo(this.stage.stageWidth/2,this.stage.stageHeight/2);
 		
 		pointImage = new Image(Root.assets.getTexture("point"));
@@ -35,7 +38,6 @@ class Game extends MenuState {
 		pointImage.x = playerShip.getGoToX();
 		pointImage.y = playerShip.getGoToY();
 		
-				
 		addChild(playerShip);
 		addChild(pointImage);
 	}
@@ -66,7 +68,8 @@ class Game extends MenuState {
 		var mouse = Root.controls.getMousePos();
 		//debugMouse.x = mouse.x;
 		//debugMouse.y = mouse.y;
-		
+		if(Root.controls.isDown("space"))
+			playerShip.setArrived(true);
 		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
 		playerShip.applyVelocity(modifier);
 	}
