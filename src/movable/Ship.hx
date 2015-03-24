@@ -16,6 +16,7 @@ class Ship extends SimpleMovable {
 	private var normalMove:Bool = false;		// If set to true, the boat will continue like a normal SimpleMovable object
 	private var prevDistFromPoint:Float = 0;	// The previous distance from the point (to prevent infinite circling)
 	private var movingTowardsPoint:Bool = true; // Whether or not we are moving towards the point;
+	private var a_Cannon:Array<Cannon> = new Array<Cannon>();
 	
 	public var turnFix:Bool = true;
 	
@@ -80,6 +81,31 @@ class Ship extends SimpleMovable {
 		
 		this.vx = thisVector.vx;
 		this.vy = thisVector.vy;
+	}
+	
+	public function tryFireCannons(time:Float, targetX:Float, targetY:Float, bulletList:List<Bullet>){
+		for(cannon in a_Cannon){
+			if( cannon.fireAtPoint(time, targetX, targetY) ){
+				var fireVector = Vector.getVector(cannon.globalX, cannon.globalY, targetX, targetY).normalize().multiply(cannon.bulletSpeed);
+				
+				var newBullet = new Bullet(cannon.bulletTexture, time, 10000);
+					newBullet.vx = fireVector.vx;
+					newBullet.vy = fireVector.vy;
+					newBullet.x = cannon.globalX;
+					newBullet.y = cannon.globalY;
+					
+				bulletList.push(newBullet);
+				this.parent.addChild(newBullet);
+			}
+		}
+	}
+	
+	/** Adds a cannon to this ship at the LOCAL x / y coordinates */
+	public function addCannon(cannon:Cannon, x:Float, y:Float){
+		a_Cannon.push(cannon);
+		this.addChild(cannon);
+		cannon.x = x;
+		cannon.y = y;
 	}
 	
 	public function distanceFromDest():Float{

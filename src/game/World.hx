@@ -7,6 +7,7 @@ import starling.core.Starling;
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
+import flash.system.System;
 
 class World extends Sprite {
 	/* The 'perfect' update time, used to modify velocities in case
@@ -20,7 +21,7 @@ class World extends Sprite {
 	private var debugMouse:Image;
 	public var playerShip:Ship;
 	public var pointImage:Image;
-	private var cannon:Cannon;
+	private var bulletList:List<Bullet> = new List<Bullet>();
 	
 	public function new (menustate:MenuState) {
 		
@@ -36,17 +37,28 @@ class World extends Sprite {
 		playerShip.setBreakPower(0.980);
 		playerShip.setBoatAcceleration(0.005);
 		playerShip.turnFix = false;
-		
 		playerShip.goTo(Starling.current.stage.stageWidth/2,Starling.current.stage.stageHeight/2);
 		
-		// Debug cannon
-		cannon = new Cannon(Math.PI/2, Math.PI/4, 500);
-		cannon.addChild(new Image(Root.assets.getTexture("point")));
-		playerShip.addChild(cannon);
-		cannon.x = playerShip.width/2;
-		//cannon.y = playerShip.height/2;
+		// Debug point texture, will be replaced eventually
+		var pointTexture = Root.assets.getTexture("point");
 		
-		pointImage = new Image(Root.assets.getTexture("point"));
+		// Debug cannon(s)
+		// Texture, Angle, Threshold, Distance, Cooldown
+		var cannon = new Cannon(pointTexture, Math.PI/2, Math.PI/4, 250, 1000);
+		cannon.addChild(new Image(pointTexture));
+		playerShip.addCannon(cannon, playerShip.width/4 - pointTexture.width/2,  -pointTexture.height/2);
+		
+		cannon = new Cannon(pointTexture, Math.PI/2, Math.PI/4, 250, 1000);
+		cannon.addChild(new Image(pointTexture));
+		playerShip.addCannon(cannon, playerShip.width*3/4 - pointTexture.width/2,  -pointTexture.height/2);
+		
+		cannon = new Cannon(pointTexture, Math.PI, Math.PI/16, 1500, 1000);
+		cannon.bulletSpeed = 15;
+		cannon.addChild(new Image(pointTexture));
+		playerShip.addCannon(cannon, playerShip.width - pointTexture.width/2, playerShip.height/2 - pointTexture.height/2);
+		
+		// Set up the point image which will display on mouse click
+		pointImage = new Image(pointTexture);
 		pointImage.width = pointImage.height = 5;
 		pointImage.pivotX = pointImage.width/2.0;
 		pointImage.pivotY = pointImage.height/2.0;
@@ -55,7 +67,6 @@ class World extends Sprite {
 		
 		addChild(playerShip);
 		addChild(pointImage);
-		
 	}
 	
 	public function update(event:EnterFrameEvent) {
@@ -69,8 +80,24 @@ class World extends Sprite {
 			playerShip.holdSpeed();
 		}
 		
+		var globalTime = flash.Lib.getTimer();
 		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
+		
+		// Apply velocity to the player ship
 		playerShip.applyVelocity(modifier);
+		
+		// Try to fire the playership's cannons at point x,y
+		playerShip.tryFireCannons(globalTime, pointImage.x, pointImage.y, bulletList);
+		
+		// Loop through the bullet list and either despawn, or apply velocity to them
+		for(bullet in bulletList){
+			if(!bullet.shouldDespawn(globalTime)){
+				bullet.applyVelocity(modifier);
+			} else {
+				bulletList.remove(bullet);
+				bullet.removeFromParent(true);
+			}
+		}
 		
 		//camera.moveTowards(playerShip.x, playerShip.y);
 		//camera.applyCamera(this);
