@@ -8,8 +8,7 @@ import starling.events.TouchEvent;
 import starling.events.EnterFrameEvent;
 
 import utility.ControlManager.ControlAction;
-import movable.SimpleMovable;
-import movable.Ship;
+import movable.*;
 
 class Game extends MenuState {
 	/* The 'perfect' update time, used to modify velocities in case
@@ -19,17 +18,24 @@ class Game extends MenuState {
 	private var debugMouse:Image;
 	private var playerShip:Ship;
 	private var pointImage:Image;
-	
+	private var cannon:Cannon;
 	override function init() {
 		rootSprite.addChild(this);
 		
 		// {texture, maxSpeed, maxAngle}
-		playerShip = new Ship(Root.assets.getTexture("test_ship"), 4, Math.PI/124);
+		playerShip = new Ship(Root.assets.getTexture("test_ship"), 2, Math.PI/256);
 		playerShip.setBreakPower(0.980);
-		playerShip.setBoatAcceleration(0.025);
+		playerShip.setBoatAcceleration(0.005);
 		playerShip.turnFix = false;
 		
 		playerShip.goTo(this.stage.stageWidth/2,this.stage.stageHeight/2);
+		
+		// Debug cannon
+		cannon = new Cannon(Math.PI/2, Math.PI/4, 500);
+		cannon.addChild(new Image(Root.assets.getTexture("point")));
+		playerShip.addChild(cannon);
+		cannon.x = playerShip.width/2;
+		//cannon.y = playerShip.height/2;
 		
 		pointImage = new Image(Root.assets.getTexture("point"));
 		pointImage.width = pointImage.height = 5;
@@ -55,8 +61,10 @@ class Game extends MenuState {
 		this.dispose();
 	}
 	
+	var lastTouch:Touch;
 	public function onTouch( event:TouchEvent ){
 		var touch:Touch = event.touches[0];
+		lastTouch = touch;
 		if(touch.phase == "ended"){
 			playerShip.goTo(touch.globalX,touch.globalY);
 			pointImage.x = touch.globalX;
@@ -72,7 +80,8 @@ class Game extends MenuState {
 		}
 		
 		if(Root.controls.isDown("hold")){
-			playerShip.holdSpeed();
+			cannon.fireAtPoint(pointImage.x, pointImage.y);
+			//playerShip.holdSpeed();
 		}
 		
 		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
