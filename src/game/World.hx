@@ -1,7 +1,7 @@
 package game;
 
 import flash.geom.Rectangle;
-import movable.Ship;
+import movable.*;
 import menus.MenuState;
 import starling.core.Starling;
 import starling.display.Image;
@@ -20,6 +20,7 @@ class World extends Sprite {
 	private var debugMouse:Image;
 	public var playerShip:Ship;
 	public var pointImage:Image;
+	private var cannon:Cannon;
 	
 	public function new (menustate:MenuState) {
 		
@@ -31,12 +32,19 @@ class World extends Sprite {
 		//this.addChild(camera);
 		
 		// {texture, maxSpeed, maxAngle}
-		playerShip = new Ship(Root.assets.getTexture("test_ship"), 4, Math.PI/124);
+		playerShip = new Ship(Root.assets.getTexture("test_ship"), 2, Math.PI/256);
 		playerShip.setBreakPower(0.980);
-		playerShip.setBoatAcceleration(0.025);
+		playerShip.setBoatAcceleration(0.005);
 		playerShip.turnFix = false;
 		
 		playerShip.goTo(Starling.current.stage.stageWidth/2,Starling.current.stage.stageHeight/2);
+		
+		// Debug cannon
+		cannon = new Cannon(Math.PI/2, Math.PI/4, 500);
+		cannon.addChild(new Image(Root.assets.getTexture("point")));
+		playerShip.addChild(cannon);
+		cannon.x = playerShip.width/2;
+		//cannon.y = playerShip.height/2;
 		
 		pointImage = new Image(Root.assets.getTexture("point"));
 		pointImage.width = pointImage.height = 5;

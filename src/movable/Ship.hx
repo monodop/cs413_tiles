@@ -128,7 +128,7 @@ class Ship extends SimpleMovable {
 		if(Math.abs(angle) > Math.PI){
 			angle -= angle/Math.abs(angle)*2*Math.PI;
 		}
-			
+		
 		// Apply a maximum angle if the angle is greater than that
 		if(Math.abs(angle) > maxAngle){
 			angle = angle/Math.abs(angle) * maxAngle;

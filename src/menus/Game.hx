@@ -9,8 +9,7 @@ import starling.events.EnterFrameEvent;
 
 import game.World;
 import utility.ControlManager.ControlAction;
-import movable.SimpleMovable;
-import movable.Ship;
+import movable.*;
 
 class Game extends MenuState {
 	
@@ -36,8 +35,10 @@ class Game extends MenuState {
 		this.dispose();
 	}
 	
+	var lastTouch:Touch;
 	public function onTouch( event:TouchEvent ){
 		var touch:Touch = event.touches[0];
+		lastTouch = touch;
 		if(touch.phase == "ended"){
 			world.playerShip.goTo(touch.globalX,touch.globalY);
 			world.pointImage.x = touch.globalX;

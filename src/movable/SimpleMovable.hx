@@ -1,9 +1,10 @@
 package movable;
 import starling.textures.Texture;
 import starling.display.Image;
+import starling.display.Sprite;
 import cmath.Vector;
 
-class SimpleMovable extends Image {
+class SimpleMovable extends Sprite {
 	var vx:Float = 0;	// X Velocity
 	var vy:Float = 0;	// Y Velocity
 	var ax:Float = 0;  	// X Acceleration
@@ -74,7 +75,12 @@ class SimpleMovable extends Image {
 	}
 	
 	public function new(texture:Texture){
-		super(texture);
+		super();
+		
+		if(texture != null){
+			this.addChild( new Image(texture) );
+		}
+		
 		this.pivotX = this.width/2.0;
 		this.pivotY = this.height/2.0;
 	}
