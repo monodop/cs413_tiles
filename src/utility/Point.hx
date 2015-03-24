@@ -156,8 +156,16 @@ class Point
 	}
 	
 	public function project(p2:Point): Point {
-		var il = 1 / this.length() * p2.length();
-		var m = this.dot(p2) * il;
-		return new Point(p2.x * m, p2.y * m);
+		
+		var adb = this.dot(p2);
+		var bdb = p2.dot(p2);
+		var x = adb * bdb;
+		var res = p2.mul(x);
+		
+		return p2.mul(this.dot(p2) / p2.dot(p2));
+	}
+	
+	public function scalarProject(p2:Point): Float {
+		return this.dot(p2) / p2.length();
 	}
 }

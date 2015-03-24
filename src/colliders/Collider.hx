@@ -4,7 +4,7 @@ import starling.display.DisplayObject;
 import starling.display.Sprite;
 import utility.Point;
 
-// A base collider class. Don't initalize one of these directly, or you'll get weird collision results.
+// A base collider class. Don't initialize one of these directly, or you'll get weird collision results.
 class Collider extends Sprite
 {
 	
@@ -17,6 +17,9 @@ class Collider extends Sprite
 	
 	private var layers:Array<String> = ["default"];
 	
+	private var boundsCache:Rectangle;
+	private var boundsSpace:DisplayObject;
+	
 	public function new(owner:HasCollider, layers:Array<String>) {
 		super();
 		
@@ -27,6 +30,8 @@ class Collider extends Sprite
 		
 		this.owner = owner;
 	}
+	
+	public function toggleDebug() { }
 	
 	// Determine if this collider is clipping with another collider.
 	// if you provide a CollisionInformation object, then it will be filled with
@@ -47,8 +52,9 @@ class Collider extends Sprite
 		var c1 = Point.fromPoint(localToGlobal(center.toGeom()));
 		var c2 = Point.fromPoint(collider.localToGlobal(collider.center.toGeom()));
 		
-		var distance = c1.distance(c2);
+		var distance = c1.distanceSqr(c2);
 		var threshold = this.radius + collider.radius;
+		threshold *= threshold;
 		
 		var clipping = distance <= threshold;
 		
@@ -72,6 +78,16 @@ class Collider extends Sprite
 		}
 		
 		return clipping;
+	}
+	
+	// Determine if a ray coming from the source point in direction dir is colliding
+	// with this collider. The space provided should be the space that this collider should
+	// be translated into. Threshold is an offset to allow more of a tolerance for
+	// rounding errors. Collisioninfo will be filled with only a reference to this collider
+	// (but this can be changed if needed).
+	// This returns the point where the ray first intersected.
+	public function rayCast(src:Point, dir:Point, ?space:DisplayObject, ?threshold:Float = 0.0, ?collisionInfo:CollisionInformation):Point {
+		return null;
 	}
 	
 	// Get the center point of the collider.
@@ -105,14 +121,26 @@ class Collider extends Sprite
 		return this.layers;
 	}
 	
+	// Gets the number of edges this collider has.
+	public function getNumEdges():Int {
+		return 0;
+	}
+	
 	// If you ever move a collider, call this function to update the quadTree.
 	public function updateQuadtree() {
-		if(this.quadTree != null)
+		if (this.quadTree != null) {
+			boundsCache = null;
+			boundsSpace = null;
 			this.quadTree.update(this);
+		}
 	}
 	
 	// Gets the rectangular bounds around this collider in the target space.
 	public override function getBounds(targetSpace:DisplayObject, ?resultRect:Rectangle):Rectangle {
+		
+		if (boundsCache != null && boundsSpace == targetSpace) {
+			return boundsCache;
+		}
 		
 		var c = center.toGeom();
 		var e = center.add(new Point(getInnerRadius(), 0)).toGeom();
@@ -136,6 +164,10 @@ class Collider extends Sprite
 		resultRect.y = tl.y;
 		resultRect.width = width;
 		resultRect.height = height;
+		
+		boundsCache = resultRect;
+		boundsSpace = targetSpace;
+		
 		return resultRect;
 	}
 	

@@ -1,9 +1,13 @@
 package colliders;
 import flash.geom.Rectangle;
+import game.Board;
 import game.Player;
+import haxe.ds.Vector;
+import haxe.macro.Expr.Position;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import utility.Point;
+import utility.Utils;
 
 // A collider that is defined by a series of points.
 // I don't know if it makes much of a difference, but I recommend
@@ -12,12 +16,22 @@ class PolygonCollider extends Collider
 {
 	
 	private var points:Array<Point>;
+	
+	private var debugCircle:Image;
+	private var debugPoints:Array<Image>;
+	
+	private var showDebug:Bool = false;
+	
+	private var pointCache:Vector<Point>;
+	private var pointSpace:Vector<DisplayObject>;
 
 	public function new(owner:HasCollider, layers:Array<String>, points:Array<Point>) 
 	{
 		super(owner, layers);
 		
 		this.points = points;
+		pointCache = new Vector<Point>(points.length);
+		pointSpace = new Vector<DisplayObject>(points.length);
 		
 		this.center = new Point();
 		for (point in points) {
@@ -30,15 +44,62 @@ class PolygonCollider extends Collider
 			this.radius = Math.max(this.radius, this.center.distanceSqr(point));
 		}
 		this.inner_radius = Math.sqrt(this.radius);
-		this.radius = this.inner_radius * 1.5;
+		this.radius = this.inner_radius;// * 1.5;
+		
+		debugCircle = new Image(Root.assets.getTexture("debugCircle"));
+		debugCircle.pivotX = 8.0;
+		debugCircle.pivotY = 8.0;
+		debugCircle.x = center.x;
+		debugCircle.y = center.y;
+		debugCircle.scaleX = this.radius / 8.0;
+		debugCircle.scaleY = this.radius / 8.0;
+		debugCircle.color = 0xff0000;
+		debugCircle.smoothing = 'none';
+		debugCircle.alpha = 0.2;
+		debugCircle.visible = false;
+		this.addChild(debugCircle);
+		
+		debugPoints = new Array<Image>();
+		for (point in points) {
+			var pt = new Image(Root.assets.getTexture("pixel"));
+			pt.pivotX = 0.5;
+			pt.pivotY = 0.5;
+			pt.x = point.x;
+			pt.y = point.y;
+			pt.color = 0x0000ff;
+			pt.visible = false;
+			debugPoints.push(pt);
+			this.addChild(pt);
+		}
+		
+	}
+	
+	public override function toggleDebug() {
+		
+		showDebug = !showDebug;
+		
+		debugCircle.visible = showDebug;
+		for (point in debugPoints) {
+			point.visible = showDebug;
+		}
 		
 	}
 	
 	// Get a point in the collider in a specific coordinate space
 	public function getPoint(index:Int, ?space:DisplayObject):Point {
-		if(space == null)
-			return Point.fromPoint(localToGlobal(points[index].toGeom()));
-		return Point.fromPoint(getTransformationMatrix(space).transformPoint(points[index].toGeom()));
+		
+		if (pointCache[index] != null && pointSpace[index] == space) {
+			return pointCache[index];
+		}
+		
+		if (space == null) {
+			pointCache[index] = Point.fromPoint(localToGlobal(points[index].toGeom()));
+			pointSpace[index] = space;
+		} else {
+			pointCache[index] = Point.fromPoint(getTransformationMatrix(space).transformPoint(points[index].toGeom()));
+			pointSpace[index] = space;
+		}
+		return pointCache[index];
 	}
 	
 	public override function isClipping(collider:Collider, ?collisionInfo:CollisionInformation) {
@@ -203,6 +264,108 @@ class PolygonCollider extends Collider
 		return false;
 	}
 	
+	public override function rayCast(src:Point, dir:Point, ?space:DisplayObject, ?threshold:Float = 0.0, ?collisionInfo:CollisionInformation):Point {
+		
+		var points = prepareVectors(space);
+		
+		var closest_intersect = null;
+		var closest_diff = Math.POSITIVE_INFINITY;
+		
+		var p = points[points.length-1];
+		var r = points[0].sub(points[points.length - 1]);
+		var intersect:Point = new Point();
+		var diff = lineIntersection(p, r, src, dir, intersect, threshold);
+		if(Math.isFinite(diff)) {
+			closest_diff = diff;
+			closest_intersect = intersect;
+		}
+		
+		for (i in 1...points.length) {
+			p = points[i - 1];
+			r = points[i].sub(points[i - 1]);
+			intersect = new Point();
+			diff = lineIntersection(p, r, src, dir, intersect, threshold);
+			if(Math.isFinite(diff)) {
+				
+				if (closest_intersect == null || diff < closest_diff) {
+					closest_intersect = intersect;
+					closest_diff = diff;
+				}
+				
+			}
+		}
+		
+		if (collisionInfo != null) {
+			
+			collisionInfo.collider_src = this;
+			collisionInfo.collider_target = null;
+			
+		}
+		
+		return closest_intersect;
+	}
+	private static function lineIntersection(p:Point, r:Point, q:Point, s:Point, outPoint:Point, ?threshold:Float = 0.0):Float {
+		
+		Board.rayCasts++;
+		
+		var rxs:Float = r.cross(s);
+		var qminp:Point = q.sub(p);
+		
+		var t = qminp.cross(s) / rxs;
+		var u = qminp.cross(r) / rxs;
+		
+		if (rxs != 0 && Utils.between(0-threshold, t, 1+threshold) && Utils.between(0-threshold, u, 1+threshold)) {
+			var res = p.add(r.mul(t));
+			outPoint.x = res.x;
+			outPoint.y = res.y;
+			return u;
+		}
+		
+		return Math.POSITIVE_INFINITY;
+		
+	}
+	
+	public static function rectangleIntersection(rect:Rectangle, src:Point, dir:Point, ?threshold:Float = 0.0):Point {
+		
+		var closest_intersect = null;
+		var closest_diff = Math.POSITIVE_INFINITY;
+		
+		var dest = src.add(dir);
+		var segChk = new Array<{p:Point, r:Point}>();
+		
+		if (Utils.between(src.x, rect.right, dest.x)) {
+			segChk.push( { p:new Point(rect.right, rect.top), r:new Point(rect.right, rect.bottom) } );
+		}
+		if (Utils.between(src.x, rect.left, dest.x)) {
+			segChk.push( { p:new Point(rect.left, rect.top), r:new Point(rect.left, rect.bottom) } );
+		}
+		
+		if (Utils.between(src.y, rect.top, dest.y)) {
+			segChk.push( { p:new Point(rect.left, rect.top), r:new Point(rect.right, rect.top) } );
+		}		if (Utils.between(src.y, rect.bottom, dest.y)) {
+			segChk.push( { p:new Point(rect.left, rect.bottom), r:new Point(rect.right, rect.bottom) } );
+		}
+		
+		var intersect:Point = new Point();
+		var diff:Float;
+		for (seg in segChk) {
+			
+			intersect = new Point();
+			diff = lineIntersection(seg.p, seg.r.sub(seg.p), src, dir, intersect, threshold);
+			if(Math.isFinite(diff)) {
+				
+				if (closest_intersect == null || diff < closest_diff) {
+					closest_intersect = intersect;
+					closest_diff = diff;
+				}
+				
+			}
+		}
+		
+		return closest_intersect;
+		
+	}
+	
 	private function getNormals(vecs:Array<Point>):Array<Point> {
 		
 		var normals:Array<Point> = new Array<Point>();
@@ -262,7 +425,21 @@ class PolygonCollider extends Collider
 		return this.inner_radius;
 	}
 	
+	public override function getNumEdges():Int {
+		return this.points.length;
+	}
 	
+	public override function updateQuadtree() {
+		if (this.quadTree != null) {
+			boundsCache = null;
+			boundsSpace = null;
+			for (i in 0...points.length) {
+				pointCache[i] = null;
+				pointSpace[i] = null;
+			}
+			this.quadTree.update(this);
+		}
+	}
 	
 	public override function getBounds(targetSpace:DisplayObject, ?resultRect:Rectangle):Rectangle {
 		

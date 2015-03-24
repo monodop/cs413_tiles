@@ -2,7 +2,7 @@ package colliders;
 
 import utility.Point;
 
-// A polygon collider in the shape of a box widht a width and height
+// A polygon collider in the shape of a box with a width and height
 class BoxCollider extends PolygonCollider
 {
 

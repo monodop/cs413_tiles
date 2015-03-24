@@ -1,7 +1,7 @@
 package colliders;
 import utility.Point;
 
-// An object that gets filled with information when used with a collider's isClipping method.
+// An object that gets filled with information when used with a collider's isClipping or rayCast method.
 class CollisionInformation {
 	
 	public var mtv_src:Point;

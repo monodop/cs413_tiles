@@ -27,16 +27,18 @@ class Quadtree
 	
 	// Create a new quadtree.
 	// pSpace is the target coordinate space for the quadtree. You might want to use the board or the game menu or something
-	public function new(pSpace:DisplayObject, pBounds:Rectangle, ?pLevel:Int = 0, ?parent:Quadtree) 
+	public function new(pSpace:DisplayObject, pBounds:Rectangle, ?pLevel:Int = 0, ?pParent:Quadtree) 
 	{
 		space = pSpace;
 		level = pLevel;
 		objects = new Array<Collider>();
 		bounds = pBounds;
 		nodes = new Vector<Quadtree>(4);
+		parent = pParent;
 	}
 	
 	// Clears out the quadtree. Do this if you want to remove everything and readd all of the objects.
+	// It might be better to update the objects' positions though.
 	public function clear() {
 		objects = new Array<Collider>();
 		for (i in 0...nodes.length) {
@@ -83,7 +85,7 @@ class Quadtree
 	}
 	
 	// Insert a new collider into the quadtree.
-	// You don't need to provide pRect, it's automatically calculated.
+	// You don't need to provide a pRect, it's automatically calculated.
 	public function insert(pObj:Collider, ?pRect:Rectangle) {
 		
 		if (pRect == null) {
@@ -111,8 +113,9 @@ class Quadtree
 				var rect = objects[i].getBounds(space);
 				var index = getIndex(rect);
 				if (index != -1) {
-					nodes[index].insert(objects[i]);
-					objects.remove(objects[i]);
+					var obj = objects[i];
+					remove(obj, false);
+					nodes[index].insert(obj);
 				} else {
 					i++;
 				}
@@ -132,21 +135,52 @@ class Quadtree
 			pRect = pObj.getBounds(space);
 		}
 		
-		if (inBounds(pRect)) {
+		if (parent == null || inBounds(pRect)) {
 			var index:Int = getIndex(pRect);
-			if (index != -1) {
-				objects.remove(pObj);
-				insert(pObj, pRect);
+			if (index != -1 && nodes[0] != null) {
+				remove(pObj, false);
+				nodes[index].insert(pObj, pRect);
+			} else if (objects.indexOf(pObj) == -1) {
+				objects.push(pObj);
+				numObjects++;
+				pObj.quadTree = this;
 			}
-		} else if(parent != null) {
+		} else if (parent != null) {
+			remove(pObj);
 			parent.update(pObj, pRect);
 		}
 	}
 	
 	// Remove a collider from the quadtree. This doesn't search for the item in the current form.
 	// If you need that, feel free to implement it.
-	public function remove(pObj:Collider) {
-		this.objects.remove(pObj);
+	public function remove(pObj:Collider, ?trycombine:Bool = true) {
+		if(this.objects.indexOf(pObj) >= 0) {
+			numObjects--;
+			this.objects.remove(pObj);
+			if(trycombine)
+				tryCombine();
+		}
+	}
+	
+	// Tries to combine this node's children into this node if there is enough space.
+	// If tryparent is true, it will also try to combine this tile and it's siblings
+	// into it's parent.
+	public function tryCombine(?tryparent:Bool = true) {
+		if (nodes[0] != null && getNumAllObjects() <= max_objects) {
+			for (i in 0...nodes.length) {
+				nodes[i].tryCombine(false);
+				for (obj in nodes[i].objects) {
+					this.objects.push(obj);
+					numObjects++;
+					obj.quadTree = this;
+				}
+				nodes[i] = null;
+			}
+			if(parent != null && tryparent)
+				parent.tryCombine();
+		} else if (getNumObjects() <= max_objects && tryparent && parent != null) {
+			parent.tryCombine();
+		}
 	}
 	
 	// This retrieves all of the colliders that can collide with a collider.
@@ -164,11 +198,25 @@ class Quadtree
 			nodes[index].retrieve(pObj, returnObjects, pRect);
 		} else if(nodes[0] != null) {
 			for (i in 0...nodes.length) {
+				if (nodes[i].bounds.left > pRect.right ||
+					nodes[i].bounds.right < pRect.left ||
+					nodes[i].bounds.top > pRect.bottom ||
+					nodes[i].bounds.bottom < pRect.top)
+					continue;
 				nodes[i].retrieve(pObj, returnObjects, pRect);
 			}
 		}
-		for (obj in objects)
-			returnObjects.push(obj);
+		for (obj in objects) {
+			if(obj.root != null) {
+				var r = obj.getBounds(space);
+				if (r.left > pRect.right ||
+					r.right < pRect.left ||
+					r.top > pRect.bottom ||
+					r.bottom < pRect.top)
+					continue;
+				returnObjects.push(obj);
+			}
+		}
 		
 		return returnObjects;
 		
@@ -181,11 +229,23 @@ class Quadtree
 		return numObjects;
 	}
 	
+	// Returns the number of objects in this level of the quadtree and all of it's children.
+	public function getNumAllObjects():Int {
+		var cnt = getNumObjects();
+		if (nodes[0] != null) {
+			for (i in 0...nodes.length) {
+				cnt += nodes[i].getNumAllObjects();
+			}
+		}
+		return cnt;
+	}
+	
 	// These functions are used to create a visualization of the quadtree.
 	private function getVisImg(imgPool:Array<Image>, imgCount:Int):Image {
 		var img:Image;
 		if (imgCount >= imgPool.length) {
 			img = new Image(Root.assets.getTexture('pixel'));
+			img.smoothing = 'none';
 			imgPool.push(img);
 		} else {
 			img = imgPool[imgCount];

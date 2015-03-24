@@ -19,4 +19,8 @@ class Utils
 		
 	}
 	
+	public static function between(a:Float, b:Float, c:Float) {
+		return (a <= b && b <= c) || (c <= b && b <= a);
+	}
+	
 }
