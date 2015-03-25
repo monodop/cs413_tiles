@@ -2,10 +2,10 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="24" tileheight="24" nextobjectid="1">
  <tileset firstgid="1" name="ShittyOcean" tilewidth="24" tileheight="24">
   <tile id="0">
-   <image width="24" height="24" source="../../../Pictures/Tiles/ShittyBeach.png"/>
+   <image width="24" height="24" source="/Tiles/ShittyBeach.png"/>
   </tile>
   <tile id="1">
-   <image width="24" height="24" source="../../../Pictures/Tiles/ShittyWater.png"/>
+   <image width="24" height="24" source="/Tiles/ShittyWater.png"/>
   </tile>
  </tileset>
  <layer name="Terrain" width="30" height="30">

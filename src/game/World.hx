@@ -22,16 +22,13 @@ class World extends Sprite {
 	public var playerShip:Ship;
 	public var pointImage:Image;
 	private var bulletList:List<Bullet> = new List<Bullet>();
-	//private var map:Tilemap;
+	private var map:Tilemap;
 	
 	public function new (menustate:MenuState) {
 
 		super();
 
-		var byteArray = Root.assets.getByteArray("ShittyTilemap");
-
-		trace(byteArray.toString());
-		//map = new Tilemap(Root.assets, byteArray.toString());
+		map = new Tilemap(Root.assets, "map");
 		this.menustate = menustate;
 		
 		//camera = new Camera(new Rectangle( -1000, -1000, 1000, 1000));
