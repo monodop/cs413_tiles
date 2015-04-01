@@ -47,7 +47,7 @@ class World extends Sprite {
 		addChild(tilemap);
 		
 		// {texture, maxSpeed, maxAngle}
-		playerShip = new Ship(Root.assets.getTexture("test_ship"), this, 2.0 / tileSize, Math.PI / 256);
+		playerShip = new Ship(Root.assets.getTexture("ships/pirate"), Root.assets.getTexture("ships/pirate_flag"), this, 2.0 / tileSize, Math.PI / 256);
 		playerShip.setBreakPower(0.980);
 		playerShip.setBoatAcceleration(0.005);
 		playerShip.turnFix = false;

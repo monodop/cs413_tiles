@@ -85,8 +85,10 @@ class SimpleMovable extends Sprite implements HasCollider {
 		
 		this.world = world;
 		
-		if(texture != null){
-			this.addChild( new Image(texture) );
+		if (texture != null) {
+			var img = new Image(texture);
+			img.smoothing = 'none';
+			this.addChild( img );
 		}
 		
 		this.pivotX = this.width/2.0;

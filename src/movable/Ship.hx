@@ -1,8 +1,10 @@
 package movable;
 
 import game.World;
+import starling.display.Image;
 import starling.textures.Texture;
 import cmath.Vector;
+import utility.Utils;
 
 class Ship extends SimpleMovable {
 
@@ -21,11 +23,21 @@ class Ship extends SimpleMovable {
 	
 	public var turnFix:Bool = true;
 	
-	public function new(texture:Texture, world:World, maxSpeed, maxAngle){
+	private var flag:Image;
+	
+	public function new(texture:Texture, flagTexture:Texture, world:World, maxSpeed, maxAngle){
 		super(texture, world);
 		
 		this.maxSpeed = maxSpeed;
 		this.maxAngle = maxAngle;
+		
+		flag = new Image(flagTexture);
+		flag.smoothing = 'none';
+		flag.pivotX = 18;
+		flag.pivotY = 12;
+		flag.x = 18;
+		flag.y = 12;
+		addChild(flag);
 	}
 	
 	/** See variable description */
@@ -172,6 +184,7 @@ class Ship extends SimpleMovable {
 		thisVector.normalize().multiply(adjustedSpeed);
 		
 		this.rotation = thisVector.getAngle();
+		this.flag.rotation = -this.rotation - Utils.deg2rad(90);
 		vx = thisVector.vx;
 		vy = thisVector.vy;
 		
