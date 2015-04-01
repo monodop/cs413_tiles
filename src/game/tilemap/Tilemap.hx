@@ -50,7 +50,7 @@ class Tilemap extends Sprite
 				var tileX = x - (bigX * bigTileSize);
 				var tileY = y - (bigY * bigTileSize);
 				
-				tiles[x][y] = new Tile("world/water", false, this, x, y);
+				tiles[x][y] = new AnimatedTile("world/water_", false, this, x, y);
 				tiles[x][y].x = tileX;
 				tiles[x][y].y = tileY;
 				
@@ -65,7 +65,7 @@ class Tilemap extends Sprite
 		// Flatten each big tile to optimize rendering.
 		for (x in 0...bigTiles.length) {
 			for (y in 0...bigTiles[x].length) {
-				bigTiles[x][y].flatten();
+				//bigTiles[x][y].flatten();
 			}
 		}
 		
