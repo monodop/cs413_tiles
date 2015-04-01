@@ -58,15 +58,15 @@ class World extends Sprite {
 		
 		// Debug cannon(s)
 		// Texture, Angle, Threshold, Distance, Cooldown
-		var cannon = new Cannon(pointTexture, this, Math.PI/2, Math.PI/4, 250, 1000);
+		var cannon = new Cannon(pointTexture, Math.PI/2, Math.PI/4, 10, 1000);
 		cannon.addChild(new Image(pointTexture));
 		playerShip.addCannon(cannon, (playerShip.width / playerShip.scaleX) / 4 - pointTexture.width/2,  -pointTexture.height/2);
 		
-		cannon = new Cannon(pointTexture, this, Math.PI/2, Math.PI/4, 250, 1000);
+		cannon = new Cannon(pointTexture, Math.PI/2, Math.PI/4, 10, 1000);
 		cannon.addChild(new Image(pointTexture));
 		playerShip.addCannon(cannon, (playerShip.width / playerShip.scaleX ) * 3 / 4 - pointTexture.width/2,  -pointTexture.height/2);
 		
-		cannon = new Cannon(pointTexture, this, Math.PI, Math.PI/16, 1500, 1000);
+		cannon = new Cannon(pointTexture, Math.PI, Math.PI/16, 40, 1000);
 		cannon.bulletSpeed = 15 / 24.0;
 		cannon.addChild(new Image(pointTexture));
 		playerShip.addCannon(cannon, (playerShip.width / playerShip.scaleX) - pointTexture.width/2, (playerShip.height / playerShip.scaleY) / 2 - pointTexture.height/2);

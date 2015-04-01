@@ -58,6 +58,7 @@ class Root extends Sprite {
 				startup.removeChild(startup.loadingBitmap);
 				var menu = new Game(rootSprite);
 				Starling.current.stage.addEventListener(TouchEvent.TOUCH, menu.onTouch);
+				Starling.current.showStats = true;
 				menu.start();
 			}
 		});

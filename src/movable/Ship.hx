@@ -5,6 +5,7 @@ import starling.display.Image;
 import starling.textures.Texture;
 import cmath.Vector;
 import utility.Utils;
+import flash.geom.Point;
 
 class Ship extends SimpleMovable {
 
@@ -99,13 +100,15 @@ class Ship extends SimpleMovable {
 	public function tryFireCannons(time:Float, targetX:Float, targetY:Float, bulletList:List<Bullet>){
 		for(cannon in a_Cannon){
 			if( cannon.fireAtPoint(time, targetX, targetY) ){
-				var fireVector = Vector.getVector(cannon.globalX, cannon.globalY, targetX, targetY).normalize().multiply(cannon.bulletSpeed);
+				var cannonPos = cannon.getTransformationMatrix(this.parent).transformPoint(new Point());
+				
+				var fireVector = Vector.getVector(cannonPos.x, cannonPos.y, targetX, targetY).normalize().multiply(cannon.bulletSpeed);
 				
 				var newBullet = new Bullet(cannon.bulletTexture, world, time, 10000);
 					newBullet.vx = fireVector.vx;
 					newBullet.vy = fireVector.vy;
-					newBullet.x = cannon.globalX;
-					newBullet.y = cannon.globalY;
+					newBullet.x = cannonPos.x;
+					newBullet.y = cannonPos.y;
 					
 				bulletList.push(newBullet);
 				this.parent.addChild(newBullet);

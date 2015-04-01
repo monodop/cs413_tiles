@@ -18,12 +18,10 @@ class Cannon extends Sprite{
 	private var world:World;
 	
 	// Global coordinates only updated after a true fireAtPoint
-	public var globalX:Float;
-	public var globalY:Float;
 	public var bulletTexture:Texture;
 	public var bulletSpeed:Float = 5.0 / 24.0;
 	
-	public function new(bulletTexture:Texture, world:World, firingAngle:Float, firingThreshold:Float, firingDistance:Float, cooldown:Float){
+	public function new(bulletTexture:Texture, firingAngle:Float, firingThreshold:Float, firingDistance:Float, cooldown:Float){
 		super();
 		this.bulletTexture = bulletTexture;
 		this.cooldown = cooldown;
@@ -60,12 +58,11 @@ class Cannon extends Sprite{
 			//var globalPoint = this.localToGlobal(new Point(this.parent.stage.x, this.parent.stage.y));
 				//globalX = globalPoint.x;
 				//globalY = globalPoint.y;
-				
+			
 			// Translate (0,0) from the cannon's space to the world's space
-			var worldPos = getTransformationMatrix(world).transformPoint(new Point());
-				
+			var worldPos = getTransformationMatrix(this.parent.parent).transformPoint(new Point());
 			// Get the direct vector of the cannon to the target point
-			var directVector = Vector.getVector(x, y, worldPos.x, worldPos.y);
+			var directVector = Vector.getVector(x, y, worldPos.x, worldPos.y);	
 			
 			// If we're in range...
 			if(directVector.getMag() <= firingDistance){
