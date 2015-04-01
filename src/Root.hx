@@ -50,11 +50,8 @@ class Root extends Sprite {
 		sfxLevel = 0.5;
 		
 		assets = new AssetManager();
-		//assets.enqueue("assets/spritesheets/spritesheet.png");
-		//assets.enqueue("assets/spritesheets/spritesheet.xml");
-		
-		assets.enqueue("assets/test_ship.png");
-		assets.enqueue("assets/point.png");
+		assets.enqueue("assets/spritesheet.png");
+		assets.enqueue("assets/spritesheet.xml");
 			
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {

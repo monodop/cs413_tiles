@@ -1,9 +1,7 @@
 package colliders;
 import flash.geom.Rectangle;
-import game.Board;
-import game.Player;
+import game.World;
 import haxe.ds.Vector;
-import haxe.macro.Expr.Position;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import utility.Point;
@@ -305,8 +303,6 @@ class PolygonCollider extends Collider
 		return closest_intersect;
 	}
 	private static function lineIntersection(p:Point, r:Point, q:Point, s:Point, outPoint:Point, ?threshold:Float = 0.0):Float {
-		
-		Board.rayCasts++;
 		
 		var rxs:Float = r.cross(s);
 		var qminp:Point = q.sub(p);

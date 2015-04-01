@@ -1,13 +1,14 @@
 package movable;
 import cmath.Vector;
+import game.World;
 import starling.textures.Texture;
 
 class Bullet extends SimpleMovable {
 	var spawnTime:Float;
 	var aliveTime:Float;
 	
-	public function new(texture:Texture, spawnTime:Float, aliveTime:Float){
-		super(texture);
+	public function new(texture:Texture, world:World, spawnTime:Float, aliveTime:Float){
+		super(texture, world);
 		this.spawnTime = spawnTime;
 		this.aliveTime = aliveTime;
 	}

@@ -1,13 +1,14 @@
 package game;
 
+import colliders.*;
 import flash.geom.Rectangle;
-import movable.*;
+import game.tilemap.Tilemap;
 import menus.MenuState;
+import movable.*;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
-import flash.system.System;
 
 class World extends Sprite {
 	/* The 'perfect' update time, used to modify velocities in case
@@ -16,6 +17,8 @@ class World extends Sprite {
 	
 	private var menustate:MenuState;
 	
+	public var tileSize:Float = 24;
+	private var tilemap:Tilemap;
 	private var camera:Camera;
 	
 	private var debugMouse:Image;
@@ -23,39 +26,50 @@ class World extends Sprite {
 	public var pointImage:Image;
 	private var bulletList:List<Bullet> = new List<Bullet>();
 	
+	private var quadTree:Quadtree;
+	private var collisionMatrix:CollisionMatrix;
+	
 	public function new (menustate:MenuState) {
 		
 		super();
 		
 		this.menustate = menustate;
 		
-		//camera = new Camera(new Rectangle( -1000, -1000, 1000, 1000));
-		//this.addChild(camera);
+		this.scaleX = tileSize;
+		this.scaleY = tileSize;
+		
+		camera = new Camera(new Rectangle( -0.5, -0.5, 100, 100));
+		this.addChild(camera);
+		
+		quadTree = new Quadtree(this, new Rectangle( -100, -100, 200, 200));
+		
+		tilemap = new Tilemap(this, 100, 100);
+		addChild(tilemap);
 		
 		// {texture, maxSpeed, maxAngle}
-		playerShip = new Ship(Root.assets.getTexture("test_ship"), 2, Math.PI/256);
+		playerShip = new Ship(Root.assets.getTexture("test_ship"), this, 2.0 / tileSize, Math.PI / 256);
 		playerShip.setBreakPower(0.980);
 		playerShip.setBoatAcceleration(0.005);
 		playerShip.turnFix = false;
-		playerShip.goTo(Starling.current.stage.stageWidth/2,Starling.current.stage.stageHeight/2);
+		playerShip.goTo(5,5);
 		
 		// Debug point texture, will be replaced eventually
 		var pointTexture = Root.assets.getTexture("point");
 		
 		// Debug cannon(s)
 		// Texture, Angle, Threshold, Distance, Cooldown
-		var cannon = new Cannon(pointTexture, Math.PI/2, Math.PI/4, 250, 1000);
+		var cannon = new Cannon(pointTexture, this, Math.PI/2, Math.PI/4, 250, 1000);
 		cannon.addChild(new Image(pointTexture));
-		playerShip.addCannon(cannon, playerShip.width/4 - pointTexture.width/2,  -pointTexture.height/2);
+		playerShip.addCannon(cannon, (playerShip.width / playerShip.scaleX) / 4 - pointTexture.width/2,  -pointTexture.height/2);
 		
-		cannon = new Cannon(pointTexture, Math.PI/2, Math.PI/4, 250, 1000);
+		cannon = new Cannon(pointTexture, this, Math.PI/2, Math.PI/4, 250, 1000);
 		cannon.addChild(new Image(pointTexture));
-		playerShip.addCannon(cannon, playerShip.width*3/4 - pointTexture.width/2,  -pointTexture.height/2);
+		playerShip.addCannon(cannon, (playerShip.width / playerShip.scaleX ) * 3 / 4 - pointTexture.width/2,  -pointTexture.height/2);
 		
-		cannon = new Cannon(pointTexture, Math.PI, Math.PI/16, 1500, 1000);
-		cannon.bulletSpeed = 15;
+		cannon = new Cannon(pointTexture, this, Math.PI, Math.PI/16, 1500, 1000);
+		cannon.bulletSpeed = 15 / 24.0;
 		cannon.addChild(new Image(pointTexture));
-		playerShip.addCannon(cannon, playerShip.width - pointTexture.width/2, playerShip.height/2 - pointTexture.height/2);
+		playerShip.addCannon(cannon, (playerShip.width / playerShip.scaleX) - pointTexture.width/2, (playerShip.height / playerShip.scaleY) / 2 - pointTexture.height/2);
 		
 		// Set up the point image which will display on mouse click
 		pointImage = new Image(pointTexture);
@@ -64,6 +78,8 @@ class World extends Sprite {
 		pointImage.pivotY = pointImage.height/2.0;
 		pointImage.x = playerShip.getGoToX();
 		pointImage.y = playerShip.getGoToY();
+		pointImage.scaleX = 1 / tileSize;
+		pointImage.scaleY = 1 / tileSize;
 		
 		addChild(playerShip);
 		addChild(pointImage);
@@ -99,8 +115,10 @@ class World extends Sprite {
 			}
 		}
 		
-		//camera.moveTowards(playerShip.x, playerShip.y);
-		//camera.applyCamera(this);
+		camera.moveTowards(playerShip.x, playerShip.y);
+		camera.applyCamera(this);
+		
+		tilemap.update(event, camera);
 	}
 	
 }

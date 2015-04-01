@@ -1,14 +1,20 @@
 package movable;
+import colliders.*;
+import game.World;
 import starling.textures.Texture;
 import starling.display.Image;
 import starling.display.Sprite;
 import cmath.Vector;
 
-class SimpleMovable extends Sprite {
+class SimpleMovable extends Sprite implements HasCollider {
 	var vx:Float = 0;	// X Velocity
 	var vy:Float = 0;	// Y Velocity
 	var ax:Float = 0;  	// X Acceleration
 	var ay:Float = 0;	// Y Acceleration
+	
+	private var world:World;
+	
+	private var collider:Collider;
 	
 	/** Return the vx of this */
 	public function getVX() : Float{
@@ -74,8 +80,10 @@ class SimpleMovable extends Sprite {
 		return true;
 	}
 	
-	public function new(texture:Texture){
+	public function new(texture:Texture, world:World){
 		super();
+		
+		this.world = world;
 		
 		if(texture != null){
 			this.addChild( new Image(texture) );
@@ -83,5 +91,37 @@ class SimpleMovable extends Sprite {
 		
 		this.pivotX = this.width/2.0;
 		this.pivotY = this.height/2.0;
+		
+		this.scaleX = 1.0 / world.tileSize;
+		this.scaleY = 1.0 / world.tileSize;
+	}
+	
+	
+	public function getColliders():Array<Collider> {
+		return [this.collider];
+	}
+	
+	public function collision(self:Collider, object:Collider, collisionInfo:CollisionInformation):Bool {
+		//var owner:HasCollider = object.getOwner();
+		//
+		//if (Std.is(owner, Projectile)) {
+			//var projectile:Projectile = cast owner;
+			//if(self.name == "PlayerShield") {
+				//Root.assets.playSound("ShieldHit", 0, 0, Root.sfxTransform(0.25));
+			//} else if (self.name == "PlayerTorso") {
+				//projectile.hitDamagable(this);
+				//projectile.detonate();
+				//return false;
+			//}
+		//}
+		return true;
+	}
+	public function updateColliders() {
+		for (collider in getColliders()) { collider.updateQuadtree(); }
+	}
+	public function setPos(x:Float, y:Float):Void {
+		this.x = x;
+		this.y = y;
+		updateColliders();
 	}
 }

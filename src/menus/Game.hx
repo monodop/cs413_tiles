@@ -18,8 +18,14 @@ class Game extends MenuState {
 	override function init() {
 		rootSprite.addChild(this);
 		
+		var centerX = Starling.current.stage.stageWidth / 2.0;
+		var centerY = Starling.current.stage.stageHeight / 2.0;
+		
 		world = new World(this);
 		addChild(world);
+		
+		world.x = centerX;
+		world.y = centerY;
 	}
 	
 	override function awake() {
@@ -39,10 +45,11 @@ class Game extends MenuState {
 	public function onTouch( event:TouchEvent ){
 		var touch:Touch = event.touches[0];
 		lastTouch = touch;
-		if(touch.phase == "ended"){
-			world.playerShip.goTo(touch.globalX,touch.globalY);
-			world.pointImage.x = touch.globalX;
-			world.pointImage.y = touch.globalY;
+		if (touch.phase == "ended") {
+			var dest = touch.getLocation(world);
+			world.playerShip.goTo(dest.x,dest.y);
+			world.pointImage.x = dest.x;
+			world.pointImage.y = dest.y;
 		}
 	}
 	

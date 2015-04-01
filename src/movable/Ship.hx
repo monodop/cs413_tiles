@@ -1,5 +1,6 @@
 package movable;
 
+import game.World;
 import starling.textures.Texture;
 import cmath.Vector;
 
@@ -20,8 +21,8 @@ class Ship extends SimpleMovable {
 	
 	public var turnFix:Bool = true;
 	
-	public function new(texture:Texture, maxSpeed, maxAngle){
-		super(texture);
+	public function new(texture:Texture, world:World, maxSpeed, maxAngle){
+		super(texture, world);
 		
 		this.maxSpeed = maxSpeed;
 		this.maxAngle = maxAngle;
@@ -88,7 +89,7 @@ class Ship extends SimpleMovable {
 			if( cannon.fireAtPoint(time, targetX, targetY) ){
 				var fireVector = Vector.getVector(cannon.globalX, cannon.globalY, targetX, targetY).normalize().multiply(cannon.bulletSpeed);
 				
-				var newBullet = new Bullet(cannon.bulletTexture, time, 10000);
+				var newBullet = new Bullet(cannon.bulletTexture, world, time, 10000);
 					newBullet.vx = fireVector.vx;
 					newBullet.vy = fireVector.vy;
 					newBullet.x = cannon.globalX;
