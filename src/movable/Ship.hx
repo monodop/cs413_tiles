@@ -87,7 +87,6 @@ class Ship extends SimpleMovable {
 		
 		var thisVector:Vector;
 		
-		trace(getMag());
 		if(getMag() <= 0.0001){
 			thisVector = Vector.getVectorFromAngle( this.rotation ).multiply(acceleration);
 		} else {
@@ -142,7 +141,7 @@ class Ship extends SimpleMovable {
 		 * Arrived is set to true
 		 * We are within our velocity's magnitude to the point
 		 * We were previously moving towards the point, but are now moving away */
-		if(arrived || distFromPoint < getMag() || ( turnFix && movingTowardsPoint && distFromPoint > prevDistFromPoint ) ){
+		if(arrived || distFromPoint < getMag()*1.2 || ( turnFix && movingTowardsPoint && distFromPoint > prevDistFromPoint ) ){
 			arrived = true;
 			
 			var thisVector = new Vector(vx,vy).multiply(breakPower);
