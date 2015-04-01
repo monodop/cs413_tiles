@@ -87,10 +87,11 @@ class Ship extends SimpleMovable {
 		
 		var thisVector:Vector;
 		
-		if(getMag() <= 0.1){
+		trace(getMag());
+		if(getMag() <= 0.0001){
 			thisVector = Vector.getVectorFromAngle( this.rotation ).multiply(acceleration);
 		} else {
-			thisVector = new Vector(vx,vy);//.normalize().multiply(maxSpeed);
+			thisVector = new Vector(vx,vy);
 		}
 		
 		this.vx = thisVector.vx;
