@@ -27,6 +27,8 @@ class World extends Sprite {
 	
 	private var debugMouse:Image;
 	public var playerShip:Ship;
+	private var a_Ship:Array<Ship> = new Array<Ship>();
+	
 	public var pointImage:Image;
 	private var bulletList:List<Bullet> = new List<Bullet>();
 	
@@ -52,24 +54,31 @@ class World extends Sprite {
 		//tilemap = new Tilemap(this, 100, 100);
 		//addChild(tilemap);
 		
+		// Debug point texture, will be replaced eventually
+		var cannonTexture = Root.assets.getTexture("ships/pirate_cannon_1");
+		var bulletTexture = Root.assets.getTexture("cannonball");
+		var pointTexture = Root.assets.getTexture("point");
+		
+		/* Set up enemy ships <should be dynamic, hard coded for now> */
+		var ship = new PathingShip(Root.assets.getTexture("ships/pirate"), Root.assets.getTexture("ships/pirate_flag"), this, 2.0 / tileSize, Math.PI / 64);
+		ship.setBreakPower(0.980);
+		ship.setBoatAcceleration(0.005);
+		ship.turnFix = true;
+		ship.setPath([new Point(5,5), new Point(30,5), new Point(30,30), new Point(5,30)]);
+		a_Ship.push(ship);
+		
 		// {texture, maxSpeed, maxAngle}
 		playerShip = new Ship(Root.assets.getTexture("ships/pirate"), Root.assets.getTexture("ships/pirate_flag"), this, 2.0 / tileSize, Math.PI / 256);
 		playerShip.setBreakPower(0.980);
 		playerShip.setBoatAcceleration(0.005);
 		playerShip.turnFix = false;
 		playerShip.goTo(5,5);
-		
-
-		// Debug point texture, will be replaced eventually
-		var cannonTexture = Root.assets.getTexture("ships/pirate_cannon_1");
-		var bulletTexture = Root.assets.getTexture("cannonball");
-		var pointTexture = Root.assets.getTexture("point");
+		a_Ship.push(playerShip);
 		
 		// Debug cannon(s)
 		// Texture, Angle, Threshold, Distance, Cooldown
 		var cannon = new Cannon(bulletTexture, Math.PI / 2, Math.PI / 4, 10, 1000);
 		playerShip.addCannon(cannon, 16, 6);
-
 		cannon = cannon = new Cannon(bulletTexture, -Math.PI / 2, Math.PI / 4, 10, 1000);
 		playerShip.addCannon(cannon, 16, 18);
 
@@ -84,8 +93,10 @@ class World extends Sprite {
 		pointImage.scaleX = 1 / tileSize;
 		pointImage.scaleY = 1 / tileSize;
 		
-		addChild(playerShip);
+		/* Add display objects to the world */
 		addChild(pointImage);
+		for(ship in a_Ship)
+			addChild(ship);
 		
 		for (collider in playerShip.getColliders())
 			this.quadTree.insert(collider);
@@ -105,11 +116,11 @@ class World extends Sprite {
 		var globalTime = flash.Lib.getTimer();
 		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
 		
-		// Apply velocity to the player ship
-		playerShip.applyVelocity(modifier);
-		
-		// Try to fire the playership's cannons at point x,y
-		playerShip.tryFireCannons(globalTime, pointImage.x, pointImage.y, bulletList);
+		for(ship in a_Ship){
+			ship.applyVelocity(modifier);
+			//ship.tryFireCannons(globalTime, pointImage.x, pointImage.y, bulletList);
+		}
+		playerShip.tryFireCannons(globalTime, a_Ship[0].x, a_Ship[0].y, bulletList);
 		
 		// Loop through the bullet list and either despawn, or apply velocity to them
 		for(bullet in bulletList){

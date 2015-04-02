@@ -23,8 +23,8 @@ class Ship extends SimpleMovable {
 	private var a_Cannon:Array<Cannon> = new Array<Cannon>();
 	
 	public var turnFix:Bool = true;
-	
 	private var flag:Image;
+	private var arriveCB:Void->Void = null;
 	
 	public function new(texture:Texture, flagTexture:Texture, world:World, maxSpeed, maxAngle){
 		super(texture, world);
@@ -97,6 +97,10 @@ class Ship extends SimpleMovable {
 		this.vy = thisVector.vy;
 	}
 	
+	public function onArrive(arriveCB:Void->Void){
+		this.arriveCB = arriveCB;
+	}
+	
 	public function tryFireCannons(time:Float, targetX:Float, targetY:Float, bulletList:List<Bullet>){
 		for(cannon in a_Cannon){
 			if( cannon.fireAtPoint(time, targetX, targetY) ){
@@ -142,11 +146,15 @@ class Ship extends SimpleMovable {
 		 * We are within our velocity's magnitude to the point
 		 * We were previously moving towards the point, but are now moving away */
 		if(arrived || distFromPoint < getMag()*1.2 || ( turnFix && movingTowardsPoint && distFromPoint > prevDistFromPoint ) ){
-			arrived = true;
-			
 			var thisVector = new Vector(vx,vy).multiply(breakPower);
 			this.vx = thisVector.vx;
 			this.vy = thisVector.vy;
+			
+			var doCallback = (!arrived && arriveCB != null);
+			arrived = true;
+			
+			if(doCallback)
+				arriveCB(); 
 			
 			return super.applyVelocity(modifier);
 		}
