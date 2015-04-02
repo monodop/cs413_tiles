@@ -17,7 +17,7 @@ class ShipBuilder{
 	
 	/* Returns a pirate ship with up to two cannons */
 	public static function getPirateShip(world, cannonMask:Int = 0x3, maxSpeed:Float = 0.0833, maxTurn:Float = 0.0122, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005){
-		var ship = new PathingShip(SHIP_SMALL, FLAG_PIRATE, world, maxSpeed, maxTurn);
+		var ship = new PathingShip(SHIP_SMALL, world, maxSpeed, maxTurn);
 		ship.setBreakPower( breakPower );
 		ship.setBoatAcceleration( acceleration );
 		ship.turnFix = turnFix;
@@ -34,12 +34,14 @@ class ShipBuilder{
 			ship.addCannon(cannon, 16, 18);
 		}
 		
+		ship.addFlag(FLAG_PIRATE, 18, 12, 18, 12);
+		
 		return ship;
 	}
 	
 	/* Returns a large english ship with up to 5 cannons */
 	public static function getLargeEnglishShip(world, cannonMask:Int = 0x31, maxSpeed:Float = 0.075, maxTurn:Float = 0.0061, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005){
-		var ship = new PathingShip(SHIP_LARGE, FLAG_ENGLISH, world, maxSpeed, maxTurn);
+		var ship = new PathingShip(SHIP_LARGE, world, maxSpeed, maxTurn);
 		ship.setBreakPower( breakPower );
 		ship.setBoatAcceleration( acceleration );
 		ship.turnFix = turnFix;
@@ -73,6 +75,10 @@ class ShipBuilder{
 			var cannon = new Cannon(CANNON_BALL, 0, Math.PI / 8, 50, 1000);
 			ship.addCannon(cannon, 6, 24);
 		}
+		
+		ship.addFlag(FLAG_ENGLISH, 1, 13, 22, 24);
+		ship.addFlag(FLAG_ENGLISH, 1, 13, 66, 24);
+		ship.addFlag(FLAG_ENGLISH, 1, 13, 89, 24);
 		
 		return ship;
 	}

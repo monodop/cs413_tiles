@@ -23,22 +23,33 @@ class Ship extends SimpleMovable {
 	private var a_Cannon:Array<Cannon> = new Array<Cannon>();
 	
 	public var turnFix:Bool = true;
-	private var flag:Image;
+	private var flags:Array<Image>;
 	private var arriveCB:Void->Void = null;
 	
-	public function new(texture:Texture, flagTexture:Texture, world:World, maxSpeed, maxAngle){
+	public function new(texture:Texture, world:World, maxSpeed, maxAngle){
 		super(texture, world);
 		
 		this.maxSpeed = maxSpeed;
 		this.maxAngle = maxAngle;
 		
-		flag = new Image(flagTexture);
+		flags = new Array<Image>();
+	}
+	
+	public function addFlag(flagTexture:Texture, flagCenterX:Float, flagCenterY:Float, shipPositionX:Float, shipPositionY:Float) {
+		
+		var flag = new Image(flagTexture);
 		flag.smoothing = 'none';
 		flag.pivotX = 18;
 		flag.pivotY = 12;
 		flag.x = 18;
 		flag.y = 12;
+		flag.pivotX = flagCenterX;
+		flag.pivotY = flagCenterY;
+		flag.x = shipPositionX;
+		flag.y = shipPositionY;
 		addChild(flag);
+		flags.push(flag);
+		
 	}
 	
 	/** See variable description */
@@ -230,7 +241,9 @@ class Ship extends SimpleMovable {
 		thisVector.normalize().multiply(adjustedSpeed);
 		
 		this.rotation = thisVector.getAngle();
-		this.flag.rotation = -this.rotation - Utils.deg2rad(90);
+		for(flag in this.flags) {
+			flag.rotation = -this.rotation - Utils.deg2rad(90);
+		}
 		vx = thisVector.vx;
 		vy = thisVector.vy;
 		

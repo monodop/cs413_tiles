@@ -12,8 +12,8 @@ class PathingShip extends Ship {
 	private var a_Point:Array<Point> = null;
 	private var pointIndex:Int = 0;
 	
-	public function new(texture:Texture, flagTexture:Texture, world:World, maxSpeed, maxAngle){
-		super(texture, flagTexture, world, maxSpeed, maxAngle);
+	public function new(texture:Texture, world:World, maxSpeed, maxAngle){
+		super(texture, world, maxSpeed, maxAngle);
 	}
 	
 	public function setPath(a_Point:Array<Point>){
