@@ -11,6 +11,7 @@ import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
 import utility.ControlManager.ControlAction;
+import utility.Point;
 
 class World extends Sprite {
 	/* The 'perfect' update time, used to modify velocities in case
@@ -139,6 +140,107 @@ class World extends Sprite {
 	}
 	public function sleep() {
 		Root.controls.unhook("quadtreevis", "quadTreeVis");
+	}
+	
+	// Pass a collider of something you want to test the collision of (the player's ship for example).
+	// optionally pass in collisionInfo to retrieve an array of collisions that occured with some (admittedly not super reliable) data about them.
+	// This function returns True if there was a collision and False if not.
+	public function checkCollision(collider:Collider, ?collisionInfo:Array<CollisionInformation>):Bool {
+		
+		if (collisionInfo == null)
+			collisionInfo = new Array<CollisionInformation>();
+		
+		var colliders = quadTree.retrieve(collider);
+		var ci:CollisionInformation;
+		for (c in colliders) {
+			ci = new CollisionInformation();
+			if (collider != c && collider.getOwner() != c.getOwner()
+				&& collisionMatrix.canCollide(collider, c)) {
+					if(collider.isClipping(c, ci)) {
+						var collide = false;
+						
+						if(collider.getOwner().collision(collider, c, ci)) {
+							collide = true;
+							if (!c.getOwner().collision(c, collider, ci.reverse()))
+								collide = false;
+							ci.reverse();
+							
+						if(collide)
+							collisionInfo.push(ci);
+						}
+					}
+				}
+		}
+		
+		return collisionInfo.length > 0;
+	}
+	
+	// Pass a source vector as a Utils.Point, and a direction vector as the ray you want to check.
+	// Pass a flash.geom.Rectangle object as the boundaries you want to check within (the camera's boundaries for example).
+	// Pass an array of layers you want to collide with.
+	// Optionally provide a threshold which can be used to prevent floating point rounding errors.
+	// Finally, optionally provide an empty array of CollisionInformation objects and it will be filled with a list of collisions that occured (probably less reliable than checkCollision).
+	// This function returns the closest contact point that occured, or null if none.
+	public function rayCast(src:Point, dir:Point, bounds:Rectangle, layers:Array<String>, ?threshold:Float = 0.0, ?collisionInfo:Array<CollisionInformation>):Point {
+		
+		if (collisionInfo == null)
+			collisionInfo = new Array<CollisionInformation>();
+			
+		var smaller_bounds = bounds.clone();
+		if (dir.x > 0)
+			smaller_bounds.x = src.x;
+		if (dir.x < 0)
+			smaller_bounds.right = src.x;
+		if (dir.y > 0)
+			smaller_bounds.y = src.y;
+		if (dir.y < 0)
+			smaller_bounds.bottom = src.y;
+		
+		var colliders = quadTree.retrieveAt(smaller_bounds);
+		var closest_intersect = null;
+		var closest_diff = Math.POSITIVE_INFINITY;
+		var ci:CollisionInformation = null;
+		for (c in colliders) {
+			
+			var canCollide = false;
+			for (l in c.getLayers()) {
+				for (layer in layers) {
+					if (l == layer) {
+						canCollide = true;
+						break;
+					}
+				}
+				if (canCollide)
+					break;
+			}
+			if (!canCollide)
+				continue;
+			
+			ci = new CollisionInformation();
+			var intersect = c.rayCast(src, dir, this, threshold, ci);
+			if (intersect != null && bounds.containsPoint(intersect.toGeom())) {
+				
+				if (closest_intersect == null) {
+					closest_intersect = intersect;
+					closest_diff = src.distanceSqr(intersect);
+					collisionInfo.push(ci);
+				} else {
+					var diff = src.distanceSqr(intersect);
+					if(diff < closest_diff) {
+						closest_diff = diff;
+						closest_intersect = intersect;
+						while (collisionInfo.length > 0)
+							collisionInfo.pop();
+						collisionInfo.push(ci);
+					} else if (diff == closest_diff)
+						collisionInfo.push(ci);
+				}
+				
+			}
+		}
+		
+		return closest_intersect;
+		
 	}
 	
 	function quadTreeVis(action:ControlAction) {
