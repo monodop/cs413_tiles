@@ -102,7 +102,7 @@ class Ship extends SimpleMovable {
 	}
 	
 	/** Assuming a linear path, attempts to predict the location of the enemy ship, and then fire at that */
-	public function tryPredictiveFire(time:Float, ship:Ship, bulletList:List<Bullet>){
+	public function tryPredictiveFire(time:Float, ship:Ship, bulletList:List<Bullet>, variance:Float = 0){
 		for(cannon in a_Cannon){
 			// Cannon position
 			var cannonPos = cannon.getTransformationMatrix(this.parent).transformPoint(new Point());
@@ -114,7 +114,7 @@ class Ship extends SimpleMovable {
 			var shipMag = shipVector.getMag();
 			var cannonMag = cannon.bulletSpeed;
 			
-			// The value forming a right triangle, which must be multipled by the cannon and enemy magnitudes
+			// The value forming a right triangle, which must be multiplied by the cannon and enemy magnitudes
 			//	 |\
 			// d | \ cannonMag*s
 			//	 |__\
@@ -122,8 +122,8 @@ class Ship extends SimpleMovable {
 			var modValue = Math.sqrt( (distFromShip*distFromShip) / (cannonMag*cannonMag - shipMag*shipMag) );
 			
 			shipVector.multiply(modValue);
-			shipVector.vx += ship.x;
-			shipVector.vy += ship.y;
+			shipVector.vx += ship.x + Math.random()*variance*2 - variance;
+			shipVector.vy += ship.y + Math.random()*variance*2 - variance;
 			
 			tryFireCannons(time, shipVector.vx, shipVector.vy, bulletList);
 		}
