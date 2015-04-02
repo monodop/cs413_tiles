@@ -8,6 +8,7 @@ import menus.QuadTreeVis;
 import movable.*;
 import starling.core.Starling;
 import starling.display.Image;
+import starling.display.Quad;
 import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
 import utility.ControlManager.ControlAction;
@@ -48,8 +49,8 @@ class World extends Sprite {
 		
 		quadTree = new Quadtree(this, new Rectangle( -0.5, -0.5, 100, 100));
 		
-		tilemap = new Tilemap(this, 100, 100);
-		addChild(tilemap);
+		//tilemap = new Tilemap(this, 100, 100);
+		//addChild(tilemap);
 		
 		// {texture, maxSpeed, maxAngle}
 		playerShip = new Ship(Root.assets.getTexture("ships/pirate"), Root.assets.getTexture("ships/pirate_flag"), this, 2.0 / tileSize, Math.PI / 256);
@@ -58,6 +59,7 @@ class World extends Sprite {
 		playerShip.turnFix = false;
 		playerShip.goTo(5,5);
 		
+
 		// Debug point texture, will be replaced eventually
 		var cannonTexture = Root.assets.getTexture("ships/pirate_cannon_1");
 		var bulletTexture = Root.assets.getTexture("cannonball");
@@ -65,22 +67,12 @@ class World extends Sprite {
 		
 		// Debug cannon(s)
 		// Texture, Angle, Threshold, Distance, Cooldown
-		var cannon = new Cannon(cannonTexture, bulletTexture, -Math.PI / 2, Math.PI / 4, 10, 1000);
-		cannon.rotation = Math.PI;
-		playerShip.addCannon(cannon, 47, 4);
-		//var cannon = new Cannon(cannonTexture, bulletTexture, Math.PI / 2, Math.PI / 4, 10, 1000);
-		//cannon.rotation = Math.PI;
-		//playerShip.addCannon(cannon, 12, 4);
-		
-		cannon = new Cannon(cannonTexture, bulletTexture, Math.PI / 2, Math.PI / 4, 10, 1000);
-		playerShip.addCannon(cannon, -17, 20);
-		//cannon = new Cannon(cannonTexture, bulletTexture, -Math.PI / 2, Math.PI / 4, 10, 1000);
-		//playerShip.addCannon(cannon, 14, 20);
-		
-		//cannon = new Cannon(cannonTexture, Math.PI, Math.PI/16, 40, 1000);
-		//cannon.bulletSpeed = 15 / 24.0;
-		//cannon.addChild(new Image(pointTexture));
-		//playerShip.addCannon(cannon, (playerShip.width / playerShip.scaleX) - pointTexture.width/2, (playerShip.height / playerShip.scaleY) / 2 - pointTexture.height/2);
+		var cannon = new Cannon(bulletTexture, Math.PI / 2, Math.PI / 4, 10, 1000);
+		playerShip.addCannon(cannon, 16, 6);
+
+		cannon = cannon = new Cannon(bulletTexture, -Math.PI / 2, Math.PI / 4, 10, 1000);
+		playerShip.addCannon(cannon, 16, 18);
+
 		
 		// Set up the point image which will display on mouse click
 		pointImage = new Image(pointTexture);
@@ -132,7 +124,7 @@ class World extends Sprite {
 		camera.moveTowards(playerShip.x, playerShip.y);
 		camera.applyCamera(this);
 		
-		tilemap.update(event, camera);
+		//tilemap.update(event, camera);
 	}
 	
 	public function awake() {

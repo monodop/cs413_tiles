@@ -6,10 +6,12 @@ import starling.display.Image;
 import starling.display.Sprite;
 import flash.geom.Point;
 import starling.textures.Texture;
+import starling.display.Quad;
 
 class Cannon extends Sprite{
 	private static var TWO_PI:Float = 6.283185;
 	
+	var cannonQuad:Quad;
 	var firingAngle:Float;
 	var firingDistance:Float;
 	var firingThreshold:Float;
@@ -22,21 +24,21 @@ class Cannon extends Sprite{
 	public var bulletTexture:Texture;
 	public var bulletSpeed:Float = 5.0 / 24.0;
 	
-	public function new(cannonTexture:Texture, bulletTexture:Texture, firingAngle:Float, firingThreshold:Float, firingDistance:Float, cooldown:Float){
+	public function new(bulletTexture:Texture, firingAngle:Float, firingThreshold:Float, firingDistance:Float, cooldown:Float){
 		super();
-		this.pivotX = cannonTexture.width / 2.0;
-		this.pivotY = 0;
 		this.bulletTexture = bulletTexture;
 		this.cooldown = cooldown;
 		this.firingAngle = firingAngle;
 		this.firingDistance = firingDistance;
 		this.firingThreshold = firingThreshold;
 		
-		var img = new Image(cannonTexture);
-		img.scaleX = 4;
-		img.scaleY = 2;
-		img.smoothing = 'none';
-		addChild(img);
+		
+		// Hacky cannon
+		cannonQuad = new Quad(8,4,0);
+		cannonQuad.pivotX = cannonQuad.width - 2;
+		cannonQuad.pivotY = cannonQuad.height / 2;
+		cannonQuad.rotation = firingAngle;
+		addChild(cannonQuad);
 	}
 	
 	/** Maximum difference when comparing to the base angle */
@@ -63,11 +65,6 @@ class Cannon extends Sprite{
 		if(time - lastFireTime >= cooldown){
 			lastFireTime = time;
 			
-			// Get the global coordinate of the cannon
-			//var globalPoint = this.localToGlobal(new Point(this.parent.stage.x, this.parent.stage.y));
-				//globalX = globalPoint.x;
-				//globalY = globalPoint.y;
-			
 			// Translate (0,0) from the cannon's space to the world's space
 			var worldPos = getTransformationMatrix(this.parent.parent).transformPoint(new Point());
 			// Get the direct vector of the cannon to the target point
@@ -88,6 +85,7 @@ class Cannon extends Sprite{
 				
 				// We can fire, yay.
 				if(angleDiff <= firingThreshold){
+					cannonQuad.rotation = directAngle - this.parent.rotation;
 					return true;
 				}
 			}
