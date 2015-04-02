@@ -30,10 +30,12 @@ class Game extends MenuState {
 	
 	override function awake() {
 		this.addEventListener(EnterFrameEvent.ENTER_FRAME, enterFrame);
+		world.awake();
 	}
 	
 	override function sleep() {
 		this.removeEventListener(EnterFrameEvent.ENTER_FRAME, enterFrame);
+		world.sleep();
 	}
 	
 	override function deinit() {

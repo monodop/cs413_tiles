@@ -5,6 +5,7 @@ import starling.textures.Texture;
 import starling.display.Image;
 import starling.display.Sprite;
 import cmath.Vector;
+import utility.Point;
 
 class SimpleMovable extends Sprite implements HasCollider {
 	var vx:Float = 0;	// X Velocity
@@ -72,6 +73,7 @@ class SimpleMovable extends Sprite implements HasCollider {
 		// Apply the velocities
 		this.x += movVector.vx;
 		this.y += movVector.vy;
+		setPos(this.x, this.y);
 		
 		// Apply acceleration
 		this.vx += ax;
@@ -93,6 +95,9 @@ class SimpleMovable extends Sprite implements HasCollider {
 		
 		this.pivotX = this.width/2.0;
 		this.pivotY = this.height/2.0;
+		
+		this.collider = new BoxCollider(this, ["ship"], this.width, this.height, new Point( this.pivotX, this.pivotY));
+		addChild(this.collider);
 		
 		this.scaleX = 1.0 / world.tileSize;
 		this.scaleY = 1.0 / world.tileSize;

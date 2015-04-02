@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:e09b1b092dabc6b7ac938414a7b26bc2:3d8c46b0056349c3550454ece5134923:ef7663426bf705b25566a93aef3a1571$ -->
+<!-- $TexturePacker:SmartUpdate:552c4bdb75944888ce6e46e39b62808e:02a7bc79792328dabdd27d066a8503ed:ef7663426bf705b25566a93aef3a1571$ -->
 <TextureAtlas imagePath="spritesheet.png">
-    <SubTexture name="cannonball" x="236" y="246" width="4" height="4"/>
-    <SubTexture name="explosions/pirate_cannon_shot_1" x="54" y="246" width="24" height="7"/>
-    <SubTexture name="explosions/pirate_cannon_shot_2" x="28" y="246" width="24" height="7"/>
-    <SubTexture name="explosions/pirate_cannon_shot_3" x="2" y="246" width="24" height="7"/>
-    <SubTexture name="explosions/pirate_cannon_shot_4" x="80" y="246" width="24" height="7"/>
-    <SubTexture name="explosions/pirate_cannon_shot_5" x="106" y="246" width="24" height="7"/>
-    <SubTexture name="explosions/pirate_cannon_shot_6" x="158" y="246" width="24" height="7"/>
-    <SubTexture name="explosions/pirate_cannon_shot_7" x="132" y="246" width="24" height="7"/>
-    <SubTexture name="explosions/pirate_cannon_shot_8" x="132" y="246" width="24" height="7"/>
+    <SubTexture name="cannonball" x="2" y="246" width="8" height="8"/>
+    <SubTexture name="explosions/pirate_cannon_shot_1" x="220" y="246" width="24" height="7"/>
+    <SubTexture name="explosions/pirate_cannon_shot_2" x="90" y="246" width="24" height="7"/>
+    <SubTexture name="explosions/pirate_cannon_shot_3" x="12" y="246" width="24" height="7"/>
+    <SubTexture name="explosions/pirate_cannon_shot_4" x="64" y="246" width="24" height="7"/>
+    <SubTexture name="explosions/pirate_cannon_shot_5" x="168" y="246" width="24" height="7"/>
+    <SubTexture name="explosions/pirate_cannon_shot_6" x="142" y="246" width="24" height="7"/>
+    <SubTexture name="explosions/pirate_cannon_shot_7" x="194" y="246" width="24" height="7"/>
+    <SubTexture name="explosions/pirate_cannon_shot_8" x="194" y="246" width="24" height="7"/>
+    <SubTexture name="greenpixel" x="249" y="246" width="1" height="1"/>
     <SubTexture name="gui/upgrademenu" x="2" y="2" width="256" height="192"/>
+    <SubTexture name="pixel" x="252" y="246" width="1" height="1"/>
     <SubTexture name="point" x="364" y="196" width="10" height="10"/>
+    <SubTexture name="redpixel" x="246" y="246" width="1" height="1"/>
     <SubTexture name="ships/big_ship" x="2" y="196" width="128" height="48"/>
     <SubTexture name="ships/big_ship_sail_english" x="132" y="196" width="26" height="45"/>
     <SubTexture name="ships/pirate" x="160" y="196" width="48" height="24"/>
-    <SubTexture name="ships/pirate_cannon_1" x="184" y="246" width="24" height="7"/>
-    <SubTexture name="ships/pirate_cannon_2" x="54" y="246" width="24" height="7"/>
-    <SubTexture name="ships/pirate_cannon_3" x="54" y="246" width="24" height="7"/>
-    <SubTexture name="ships/pirate_cannon_4" x="54" y="246" width="24" height="7"/>
-    <SubTexture name="ships/pirate_cannon_5" x="54" y="246" width="24" height="7"/>
-    <SubTexture name="ships/pirate_cannon_6" x="54" y="246" width="24" height="7"/>
-    <SubTexture name="ships/pirate_cannon_7" x="210" y="246" width="24" height="7"/>
-    <SubTexture name="ships/pirate_cannon_8" x="184" y="246" width="24" height="7"/>
+    <SubTexture name="ships/pirate_cannon_1" x="116" y="246" width="24" height="7"/>
+    <SubTexture name="ships/pirate_cannon_2" x="220" y="246" width="24" height="7"/>
+    <SubTexture name="ships/pirate_cannon_3" x="220" y="246" width="24" height="7"/>
+    <SubTexture name="ships/pirate_cannon_4" x="220" y="246" width="24" height="7"/>
+    <SubTexture name="ships/pirate_cannon_5" x="220" y="246" width="24" height="7"/>
+    <SubTexture name="ships/pirate_cannon_6" x="220" y="246" width="24" height="7"/>
+    <SubTexture name="ships/pirate_cannon_7" x="38" y="246" width="24" height="7"/>
+    <SubTexture name="ships/pirate_cannon_8" x="116" y="246" width="24" height="7"/>
     <SubTexture name="ships/pirate_flag" x="210" y="196" width="48" height="24"/>
     <SubTexture name="test_ship" x="260" y="2" width="100" height="50"/>
-    <SubTexture name="world/water_1" x="260" y="196" width="24" height="24"/>
-    <SubTexture name="world/water_2" x="286" y="196" width="24" height="24"/>
-    <SubTexture name="world/water_3" x="312" y="196" width="24" height="24"/>
-    <SubTexture name="world/water_4" x="338" y="196" width="24" height="24"/>
+    <SubTexture name="world/water_1" x="338" y="196" width="24" height="24"/>
+    <SubTexture name="world/water_2" x="312" y="196" width="24" height="24"/>
+    <SubTexture name="world/water_3" x="286" y="196" width="24" height="24"/>
+    <SubTexture name="world/water_4" x="260" y="196" width="24" height="24"/>
 </TextureAtlas>

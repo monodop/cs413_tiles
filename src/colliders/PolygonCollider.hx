@@ -44,18 +44,18 @@ class PolygonCollider extends Collider
 		this.inner_radius = Math.sqrt(this.radius);
 		this.radius = this.inner_radius;// * 1.5;
 		
-		debugCircle = new Image(Root.assets.getTexture("debugCircle"));
-		debugCircle.pivotX = 8.0;
-		debugCircle.pivotY = 8.0;
-		debugCircle.x = center.x;
-		debugCircle.y = center.y;
-		debugCircle.scaleX = this.radius / 8.0;
-		debugCircle.scaleY = this.radius / 8.0;
-		debugCircle.color = 0xff0000;
-		debugCircle.smoothing = 'none';
-		debugCircle.alpha = 0.2;
-		debugCircle.visible = false;
-		this.addChild(debugCircle);
+		//debugCircle = new Image(Root.assets.getTexture("debugCircle"));
+		//debugCircle.pivotX = 8.0;
+		//debugCircle.pivotY = 8.0;
+		//debugCircle.x = center.x;
+		//debugCircle.y = center.y;
+		//debugCircle.scaleX = this.radius / 8.0;
+		//debugCircle.scaleY = this.radius / 8.0;
+		//debugCircle.color = 0xff0000;
+		//debugCircle.smoothing = 'none';
+		//debugCircle.alpha = 0.2;
+		//debugCircle.visible = false;
+		//this.addChild(debugCircle);
 		
 		debugPoints = new Array<Image>();
 		for (point in points) {

@@ -43,6 +43,8 @@ class Root extends Sprite {
 		controls.registerAction("hold", Keyboard.SPACE);
 		controls.registerAction("break", Keyboard.Z);
 		
+		controls.registerAction("quadtreevis", Keyboard.F1);
+		
 		Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, controls.keyDown);
 		Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, controls.keyUp);
 		Starling.current.stage.addEventListener(TouchEvent.TOUCH, controls.touch);

@@ -2,6 +2,7 @@ package movable;
 
 import cmath.Vector;
 import game.World;
+import starling.display.Image;
 import starling.display.Sprite;
 import flash.geom.Point;
 import starling.textures.Texture;
@@ -21,13 +22,21 @@ class Cannon extends Sprite{
 	public var bulletTexture:Texture;
 	public var bulletSpeed:Float = 5.0 / 24.0;
 	
-	public function new(bulletTexture:Texture, firingAngle:Float, firingThreshold:Float, firingDistance:Float, cooldown:Float){
+	public function new(cannonTexture:Texture, bulletTexture:Texture, firingAngle:Float, firingThreshold:Float, firingDistance:Float, cooldown:Float){
 		super();
+		this.pivotX = cannonTexture.width / 2.0;
+		this.pivotY = 0;
 		this.bulletTexture = bulletTexture;
 		this.cooldown = cooldown;
 		this.firingAngle = firingAngle;
 		this.firingDistance = firingDistance;
 		this.firingThreshold = firingThreshold;
+		
+		var img = new Image(cannonTexture);
+		img.scaleX = 4;
+		img.scaleY = 2;
+		img.smoothing = 'none';
+		addChild(img);
 	}
 	
 	/** Maximum difference when comparing to the base angle */
