@@ -65,7 +65,9 @@ class World extends Sprite {
 		a_Ship.push(ship);
 		
 		// Create an enemy ship
-		//a_Ship.push(ship);
+		ship = ShipBuilder.getPirateShip(this, 3);
+		ship.setPath([new Point(27,31), new Point(10,15), new Point(25,25), new Point(50,50)]);
+		a_Ship.push(ship);
 		
 		// Create the player ship
 		playerShip = ShipBuilder.getPirateShip(this, 3);
@@ -129,7 +131,7 @@ class World extends Sprite {
 		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
 		
 		// Attack the closest in range ship
-		playerShip.tryPredictiveFire(globalTime, a_Ship.first(), bulletList, 1.0);
+		playerShip.tryPredictiveFireAtShips(globalTime, a_Ship, bulletList, 1.0);
 
 		// Update ship velocities
 		playerShip.applyVelocity(modifier);
