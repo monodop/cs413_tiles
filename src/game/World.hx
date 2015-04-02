@@ -91,6 +91,10 @@ class World extends Sprite {
 		// Set up the colliders
 		for (collider in playerShip.getColliders())
 			this.quadTree.insert(collider);
+		for (ship in a_Ship) {
+			for (collider in ship.getColliders())
+				this.quadTree.insert(collider);
+		}
 	}
 	
 	public function update(event:EnterFrameEvent) {
