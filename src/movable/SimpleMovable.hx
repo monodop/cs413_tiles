@@ -96,11 +96,16 @@ class SimpleMovable extends Sprite implements HasCollider {
 		this.pivotX = this.width/2.0;
 		this.pivotY = this.height/2.0;
 		
-		this.collider = new BoxCollider(this, ["ship"], this.width, this.height, new Point( this.pivotX, this.pivotY));
-		addChild(this.collider);
+		initColliders();
 		
 		this.scaleX = 1.0 / world.tileSize;
 		this.scaleY = 1.0 / world.tileSize;
+	}
+	
+	public function initColliders() {
+		
+		this.collider = new BoxCollider(this, ["ship"], this.width, this.height, new Point( this.pivotX, this.pivotY));
+		addChild(this.collider);
 	}
 	
 	

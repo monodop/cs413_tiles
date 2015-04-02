@@ -161,7 +161,7 @@ class Ship extends SimpleMovable {
 					newBullet.y = cannonPos.y;
 					
 				bulletList.push(newBullet);
-				this.parent.addChild(newBullet);
+				world.addMovable(newBullet);
 			}
 		}
 	}

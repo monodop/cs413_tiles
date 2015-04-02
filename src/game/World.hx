@@ -65,7 +65,7 @@ class World extends Sprite {
 		a_Ship.push(ship);
 		
 		// Create an enemy ship
-		a_Ship.push(ship);
+		//a_Ship.push(ship);
 		
 		// Create the player ship
 		playerShip = ShipBuilder.getPirateShip(this, 3);
@@ -83,18 +83,32 @@ class World extends Sprite {
 		pointImage.scaleY = 1 / tileSize;
 		
 		/* Add display objects to the world */
-		addChild(playerShip);
+		//addChild(playerShip);
+		addMovable(playerShip);
 		addChild(pointImage);
 		for(ship in a_Ship)
-			addChild(ship);
+			addMovable(ship);
 		
 		// Set up the colliders
-		for (collider in playerShip.getColliders())
+		//for (collider in playerShip.getColliders())
+			//this.quadTree.insert(collider);
+		//for (ship in a_Ship) {
+			//for (collider in ship.getColliders())
+				//this.quadTree.insert(collider);
+		//}
+	}
+	
+	public function addMovable(obj:SimpleMovable) {
+		addChild(obj);
+		for (collider in obj.getColliders()) {
 			this.quadTree.insert(collider);
-		for (ship in a_Ship) {
-			for (collider in ship.getColliders())
-				this.quadTree.insert(collider);
 		}
+	}
+	public function removeMovable(obj:SimpleMovable) {
+		for (collider in obj.getColliders()) {
+			collider.quadTree.remove(collider, true);
+		}
+		removeChild(obj);
 	}
 	
 	public function update(event:EnterFrameEvent) {
@@ -130,7 +144,7 @@ class World extends Sprite {
 				bullet.applyVelocity(modifier);
 			} else {
 				bulletList.remove(bullet);
-				bullet.removeFromParent(true);
+				removeMovable(bullet);
 			}
 		}
 		
@@ -141,8 +155,6 @@ class World extends Sprite {
 		// Update the tilemap
 		//tilemap.update(event, camera);
 	}
-	
-	
 	
 	
 	

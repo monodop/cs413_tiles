@@ -15,7 +15,7 @@ class Collider extends Sprite
 	private var owner:HasCollider;
 	public var quadTree:Quadtree;
 	
-	private var layers:Array<String> = ["default"];
+	public var layers:Array<String> = ["default"];
 	
 	private var boundsCache:Rectangle;
 	private var boundsSpace:DisplayObject;
