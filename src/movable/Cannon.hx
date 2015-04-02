@@ -11,12 +11,12 @@ import starling.display.Quad;
 class Cannon extends Sprite{
 	private static var TWO_PI:Float = 6.283185;
 	
-	var cannonQuad:Quad;
-	var firingAngle:Float;
-	var firingDistance:Float;
-	var firingThreshold:Float;
-	var cooldown:Float;
-	var lastFireTime:Float = -9999;
+	private var cannonQuad:Quad;
+	private var firingAngle:Float;
+	private var firingDistance:Float;
+	private var firingThreshold:Float;
+	private var cooldown:Float;
+	private var lastFireTime:Float = -9999;
 	
 	private var world:World;
 	

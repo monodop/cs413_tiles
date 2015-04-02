@@ -24,7 +24,6 @@ class PathingShip extends Ship {
 	}
 	
 	public function arrivedAtPoint(){
-		trace(gotoX, gotoY);
 		goTo( a_Point[pointIndex].x, a_Point[pointIndex].y );
 		pointIndex = (pointIndex+1) % a_Point.length;
 	}

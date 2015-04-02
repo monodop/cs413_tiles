@@ -60,9 +60,9 @@ class World extends Sprite {
 		var pointTexture = Root.assets.getTexture("point");
 		
 		/* Set up enemy ships <should be dynamic, hard coded for now> */
-		var ship = new PathingShip(Root.assets.getTexture("ships/pirate"), Root.assets.getTexture("ships/pirate_flag"), this, 2.0 / tileSize, Math.PI / 64);
+		var ship = new PathingShip(Root.assets.getTexture("ships/big_ship"), Root.assets.getTexture("ships/big_ship_sail_english"), this, 1.5 / tileSize, Math.PI / 512);
 		ship.setBreakPower(0.980);
-		ship.setBoatAcceleration(0.005);
+		ship.setBoatAcceleration(999);
 		ship.turnFix = true;
 		ship.setPath([new Point(5,5), new Point(30,5), new Point(30,30), new Point(5,30)]);
 		a_Ship.push(ship);
@@ -116,11 +116,12 @@ class World extends Sprite {
 		var globalTime = flash.Lib.getTimer();
 		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
 		
+		playerShip.tryPredictiveFire(globalTime, a_Ship[0], bulletList);
+
 		for(ship in a_Ship){
 			ship.applyVelocity(modifier);
 			//ship.tryFireCannons(globalTime, pointImage.x, pointImage.y, bulletList);
 		}
-		playerShip.tryFireCannons(globalTime, a_Ship[0].x, a_Ship[0].y, bulletList);
 		
 		// Loop through the bullet list and either despawn, or apply velocity to them
 		for(bullet in bulletList){
