@@ -64,6 +64,9 @@ class World extends Sprite {
 		ship.setPath([new Point(15,15), new Point(40,15), new Point(40,40), new Point(15,40)]);
 		a_Ship.push(ship);
 		
+		// Create an enemy ship
+		a_Ship.push(ship);
+		
 		// Create the player ship
 		playerShip = ShipBuilder.getPirateShip(this, 3);
 		playerShip.turnFix = false;
