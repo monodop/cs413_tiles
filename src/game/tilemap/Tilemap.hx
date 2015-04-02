@@ -68,7 +68,6 @@ class Tilemap extends Sprite
 				//bigTiles[x][y].flatten();
 			}
 		}
-		
 	}
 	
 	public function getTile(x:Int, y:Int):Tile {

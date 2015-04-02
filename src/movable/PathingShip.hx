@@ -14,11 +14,11 @@ class PathingShip extends Ship {
 	
 	public function new(texture:Texture, flagTexture:Texture, world:World, maxSpeed, maxAngle){
 		super(texture, flagTexture, world, maxSpeed, maxAngle);
-		onArrive(arrivedAtPoint);
 	}
 	
 	public function setPath(a_Point:Array<Point>){
 		this.a_Point = a_Point;
+		onArrive(arrivedAtPoint);
 		pointIndex = 0;
 		arrivedAtPoint();
 	}

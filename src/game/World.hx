@@ -55,33 +55,21 @@ class World extends Sprite {
 		//addChild(tilemap);
 		
 		// Debug point texture, will be replaced eventually
-		var cannonTexture = Root.assets.getTexture("ships/pirate_cannon_1");
 		var bulletTexture = Root.assets.getTexture("cannonball");
 		var pointTexture = Root.assets.getTexture("point");
 		
+		ShipBuilder.populateResources();
+				
 		/* Set up enemy ships <should be dynamic, hard coded for now> */
-		var ship = new PathingShip(Root.assets.getTexture("ships/big_ship"), Root.assets.getTexture("ships/big_ship_sail_english"), this, 1.75 / tileSize, Math.PI / 512);
-		ship.setBreakPower(0.980);
-		ship.setBoatAcceleration(999);
-		ship.turnFix = true;
+		var ship = ShipBuilder.getLargeEnglishShip(this, 16);
 		ship.setPath([new Point(15,15), new Point(40,15), new Point(40,40), new Point(15,40)]);
 		a_Ship.push(ship);
 		
 		// {texture, maxSpeed, maxAngle}
-		playerShip = new Ship(Root.assets.getTexture("ships/pirate"), Root.assets.getTexture("ships/pirate_flag"), this, 2.0 / tileSize, Math.PI / 256);
-		playerShip.setBreakPower(0.980);
-		playerShip.setBoatAcceleration(0.005);
+		playerShip = ShipBuilder.getPirateShip(this, 3);
 		playerShip.turnFix = false;
 		playerShip.goTo(5,5);
 		a_Ship.push(playerShip);
-		
-		// Debug cannon(s)
-		// Texture, Angle, Threshold, Distance, Cooldown
-		var cannon = new Cannon(bulletTexture, Math.PI / 2, Math.PI / 4, 10, 1000);
-		playerShip.addCannon(cannon, 16, 6);
-		cannon = cannon = new Cannon(bulletTexture, -Math.PI / 2, Math.PI / 4, 10, 1000);
-		playerShip.addCannon(cannon, 16, 18);
-
 		
 		// Set up the point image which will display on mouse click
 		pointImage = new Image(pointTexture);
@@ -120,7 +108,6 @@ class World extends Sprite {
 
 		for(ship in a_Ship){
 			ship.applyVelocity(modifier);
-			//ship.tryFireCannons(globalTime, pointImage.x, pointImage.y, bulletList);
 		}
 		
 		// Loop through the bullet list and either despawn, or apply velocity to them
@@ -138,6 +125,16 @@ class World extends Sprite {
 		
 		//tilemap.update(event, camera);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public function awake() {
 		Root.controls.hook("quadtreevis", "quadTreeVis", quadTreeVis);
