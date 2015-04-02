@@ -63,8 +63,7 @@ class Cannon extends Sprite{
 	/** Attempts to fire at a point if it is within the dist & angle */
 	public function fireAtPoint(time:Float, x:Float, y:Float):Bool{
 		if(time - lastFireTime >= cooldown){
-			lastFireTime = time;
-			
+						
 			// Translate (0,0) from the cannon's space to the world's space
 			var worldPos = getTransformationMatrix(this.parent.parent).transformPoint(new Point());
 			// Get the direct vector of the cannon to the target point
@@ -86,6 +85,7 @@ class Cannon extends Sprite{
 				// We can fire, yay.
 				if(angleDiff <= firingThreshold){
 					cannonQuad.rotation = directAngle - this.parent.rotation;
+					lastFireTime = time;
 					return true;
 				}
 			}
