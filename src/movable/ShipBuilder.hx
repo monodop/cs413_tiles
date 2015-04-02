@@ -46,32 +46,32 @@ class ShipBuilder{
 		
 		// Front Left cannon
 		if(cannonMask & 0x1 != 0){
-			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 4, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 8, 20, 1000);
 			ship.addCannon(cannon, 80, 10);
 		}
 		
 		// Front Right cannon
 		if(cannonMask & 0x2 != 0){
-			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 4, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 8, 20, 1000);
 			ship.addCannon(cannon, 80, 39);
 		}
 		
 		// Back Left cannon
 		if(cannonMask & 0x4 != 0){
-			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 4, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 8, 20, 1000);
 			ship.addCannon(cannon, 40, 10);
 		}
 		
 		// Back Right cannon
 		if(cannonMask & 0x8 != 0){
-			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 4, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 8, 20, 1000);
 			ship.addCannon(cannon, 40, 39);
 		}
 		
 		// Rear cannon
 		if(cannonMask & 0x16 != 0){
-			var cannon = new Cannon(CANNON_BALL, -Math.PI, Math.PI / 4, 10, 1000);
-			ship.addCannon(cannon, 4, 24);
+			var cannon = new Cannon(CANNON_BALL, 0, Math.PI / 8, 50, 1000);
+			ship.addCannon(cannon, 6, 24);
 		}
 		
 		return ship;

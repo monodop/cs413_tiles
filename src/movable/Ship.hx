@@ -101,6 +101,13 @@ class Ship extends SimpleMovable {
 		this.arriveCB = arriveCB;
 	}
 	
+	/** Taking in a list of ships, try to fire at them */
+	public function tryPredictiveFireAtShips(time:Float, a_Ship:List<Ship>, bulletList:List<Bullet>, variance:Float){
+		for(ship in a_Ship){
+			tryPredictiveFire(time, ship, bulletList, variance);
+		}
+	}
+	
 	/** Assuming a linear path, attempts to predict the location of the enemy ship, and then fire at that */
 	public function tryPredictiveFire(time:Float, ship:Ship, bulletList:List<Bullet>, variance:Float = 0){
 		for(cannon in a_Cannon){

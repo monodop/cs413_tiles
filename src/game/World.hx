@@ -27,7 +27,7 @@ class World extends Sprite {
 	
 	private var debugMouse:Image;
 	public var playerShip:Ship;
-	private var a_Ship:Array<Ship> = new Array<Ship>();
+	private var a_Ship:List<Ship> = new List<Ship>();
 	
 	public var pointImage:Image;
 	private var bulletList:List<Bullet> = new List<Bullet>();
@@ -68,7 +68,6 @@ class World extends Sprite {
 		playerShip = ShipBuilder.getPirateShip(this, 3);
 		playerShip.turnFix = false;
 		playerShip.goTo(5,5);
-		a_Ship.push(playerShip);
 		
 		// Set up the point image which will display on mouse click
 		pointImage = new Image(Root.assets.getTexture("point"));
@@ -81,6 +80,7 @@ class World extends Sprite {
 		pointImage.scaleY = 1 / tileSize;
 		
 		/* Add display objects to the world */
+		addChild(playerShip);
 		addChild(pointImage);
 		for(ship in a_Ship)
 			addChild(ship);
@@ -108,11 +108,13 @@ class World extends Sprite {
 		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
 		
 		// Attack the closest in range ship
-		playerShip.tryPredictiveFire(globalTime, a_Ship[0], bulletList, 1.0);
+		playerShip.tryPredictiveFire(globalTime, a_Ship.first(), bulletList, 1.0);
 
 		// Update ship velocities
+		playerShip.applyVelocity(modifier);
 		for(ship in a_Ship){
 			ship.applyVelocity(modifier);
+			ship.tryPredictiveFire(globalTime, playerShip, bulletList, 1.5);
 		}
 		
 		// Loop through the bullet list and either despawn, or apply velocity to them
