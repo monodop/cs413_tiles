@@ -102,11 +102,11 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
-            <enum type="AlgorithmSettings::SizeConstraints">AnySize</enum>
+            <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
             <key>forceSquared</key>
             <false/>
             <key>forceWordAligned</key>
@@ -119,9 +119,9 @@
             <key>basic</key>
             <struct type="AlgorithmBasicSettings">
                 <key>sortBy</key>
-                <enum type="AlgorithmBasicSettings::SortBy">Height</enum>
+                <enum type="AlgorithmBasicSettings::SortBy">Best</enum>
                 <key>order</key>
-                <enum type="AlgorithmBasicSettings::Order">Descending</enum>
+                <enum type="AlgorithmBasicSettings::Order">Ascending</enum>
             </struct>
         </struct>
         <key>andEngine</key>
