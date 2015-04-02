@@ -37,7 +37,7 @@ class ShipBuilder{
 		return ship;
 	}
 	
-	/* Returns a large english ship with up to four cannons */
+	/* Returns a large english ship with up to 5 cannons */
 	public static function getLargeEnglishShip(world, cannonMask:Int = 0x31, maxSpeed:Float = 0.075, maxTurn:Float = 0.0061, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005){
 		var ship = new PathingShip(SHIP_LARGE, FLAG_ENGLISH, world, maxSpeed, maxTurn);
 		ship.setBreakPower( breakPower );

@@ -38,41 +38,40 @@ class World extends Sprite {
 	private var collisionMatrix:CollisionMatrix;
 	
 	public function new (menustate:MenuState) {
-		
 		super();
 		
+		// Rescale the world and initiate the menu state
 		this.menustate = menustate;
-		
 		this.scaleX = tileSize;
 		this.scaleY = tileSize;
 		
+		// Setup the camera tracking class
 		camera = new Camera(new Rectangle( -0.5, -0.5, 100, 100));
 		this.addChild(camera);
 		
+		// Prepare the quadtree
 		quadTree = new Quadtree(this, new Rectangle( -0.5, -0.5, 100, 100));
 		
+		// Prepare the tilemap
 		//tilemap = new Tilemap(this, 100, 100);
 		//addChild(tilemap);
 		
-		// Debug point texture, will be replaced eventually
-		var bulletTexture = Root.assets.getTexture("cannonball");
-		var pointTexture = Root.assets.getTexture("point");
-		
+		// Populate the shipbuilder's static resources
 		ShipBuilder.populateResources();
 				
-		/* Set up enemy ships <should be dynamic, hard coded for now> */
-		var ship = ShipBuilder.getLargeEnglishShip(this, 16);
+		// Create an enemy ship
+		var ship = ShipBuilder.getLargeEnglishShip(this, 31);
 		ship.setPath([new Point(15,15), new Point(40,15), new Point(40,40), new Point(15,40)]);
 		a_Ship.push(ship);
 		
-		// {texture, maxSpeed, maxAngle}
+		// Create the player ship
 		playerShip = ShipBuilder.getPirateShip(this, 3);
 		playerShip.turnFix = false;
 		playerShip.goTo(5,5);
 		a_Ship.push(playerShip);
 		
 		// Set up the point image which will display on mouse click
-		pointImage = new Image(pointTexture);
+		pointImage = new Image(Root.assets.getTexture("point"));
 		pointImage.width = pointImage.height = 5;
 		pointImage.pivotX = pointImage.width/2.0;
 		pointImage.pivotY = pointImage.height/2.0;
@@ -86,6 +85,7 @@ class World extends Sprite {
 		for(ship in a_Ship)
 			addChild(ship);
 		
+		// Set up the colliders
 		for (collider in playerShip.getColliders())
 			this.quadTree.insert(collider);
 	}
@@ -93,19 +93,24 @@ class World extends Sprite {
 	public function update(event:EnterFrameEvent) {
 		var mouse = Root.controls.getMousePos();
 
+		// Control the ship's break
 		if(Root.controls.isDown("break")){
 			playerShip.stopMovement();
 		}
 		
+		// Hold the ship's current speed
 		if(Root.controls.isDown("hold")){
 			playerShip.holdSpeed();
 		}
 		
+		// Time variables used for constant movement + timing events
 		var globalTime = flash.Lib.getTimer();
 		var modifier = (event == null) ? 1.0 : event.passedTime / perfectDeltaTime;
 		
+		// Attack the closest in range ship
 		playerShip.tryPredictiveFire(globalTime, a_Ship[0], bulletList, 1.0);
 
+		// Update ship velocities
 		for(ship in a_Ship){
 			ship.applyVelocity(modifier);
 		}
@@ -120,9 +125,11 @@ class World extends Sprite {
 			}
 		}
 		
+		// Update the camera object
 		camera.moveTowards(playerShip.x, playerShip.y);
 		camera.applyCamera(this);
 		
+		// Update the tilemap
 		//tilemap.update(event, camera);
 	}
 	
