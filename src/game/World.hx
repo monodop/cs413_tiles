@@ -102,7 +102,9 @@ class World extends Sprite {
 		// Create the player ship
 		playerShip = ShipBuilder.getPirateShip(this, 3);
 		playerShip.turnFix = false;
-		playerShip.goTo(5,5);
+		playerShip.x = 10;
+		playerShip.y = 7;
+		playerShip.goTo(10,7);
 		
 		// Set up the point image which will display on mouse click
 		pointImage = new Image(Root.assets.getTexture("gui/crosshair"));
@@ -134,7 +136,7 @@ class World extends Sprite {
 		
 		// Create a point counter
 		pointText = new TextField(200,50,"Score: 0", BitmapFont.MINI);
-		pointText.y = 5;
+		pointText.y = this.stage.stageHeight - 60;
 		pointText.x = this.stage.stageWidth - pointText.width - 30;
 		pointText.color = 0xFFFFFF;
 		pointText.fontSize = 18;
@@ -169,6 +171,7 @@ class World extends Sprite {
 			for(i in 0...4){
 				pathArray.push(new Point(Math.random()*100, Math.random()*100));
 			}
+			
 			ship.x = pathArray[0].x;
 			ship.y = pathArray[0].y;
 			ship.rotation = Math.random()*Math.PI*2;
@@ -181,7 +184,7 @@ class World extends Sprite {
 	
 	public function destroyShip(ship:Ship){
 		if(ship == playerShip){
-			trace('player dead');
+			gameOver();
 		} else {
 			a_Ship.remove(ship);
 			removeMovable(ship);
@@ -221,7 +224,7 @@ class World extends Sprite {
 		playerShip.tryPredictiveFireAtShips(globalTime, a_Ship, bulletList, 1.0);
 		
 		healthBar.setBarSpan(playerShip.getHealthRatio());
-		playerShip.healShip(0.005);
+		playerShip.healShip(0.0025);
 		
 		// Update ship velocities
 		playerShip.applyVelocity(modifier);
@@ -284,14 +287,13 @@ class World extends Sprite {
 		tilemap.update(event, camera);
 	}
 	
-	
-	
 	public function awake() {
 		Root.controls.hook("quadtreevis", "quadTreeVis", quadTreeVis);
 		Root.controls.hook("menu", "openMenu", openMenu);
 		Root.controls.hook("retire", "retire", retire);
 		Starling.current.stage.addEventListener(TouchEvent.TOUCH, onTouch);
 	}
+	
 	public function sleep() {
 		Root.controls.unhook("quadtreevis", "quadTreeVis");
 		Root.controls.unhook("menu", "openMenu");

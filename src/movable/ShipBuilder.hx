@@ -49,6 +49,7 @@ class ShipBuilder{
 			ship.addCannon(cannon, 16, 18);
 		}
 		
+		ship.setMaxHealth(8);
 		ship.deathAnimationStr = "ships/pirate_sink_";
 		return ship;
 	}
@@ -94,6 +95,7 @@ class ShipBuilder{
 		ship.addFlag(FLAG_ENGLISH, 1, 13, 66, 24);
 		ship.addFlag(FLAG_ENGLISH, 1, 13, 89, 24);
 		
+		ship.setMaxHealth(20);
 		ship.worthPoints = 2;
 		ship.deathAnimationStr = "ships/big_ship_sink_";
 		return ship;
