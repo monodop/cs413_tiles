@@ -102,9 +102,9 @@ class World extends Sprite {
 		// Create the player ship
 		playerShip = ShipBuilder.getPirateShip(this, 3);
 		playerShip.turnFix = false;
-		playerShip.x = 10;
+		playerShip.x = 9;
 		playerShip.y = 7;
-		playerShip.goTo(10,7);
+		playerShip.goTo(9.5,7);
 		
 		// Set up the point image which will display on mouse click
 		pointImage = new Image(Root.assets.getTexture("gui/crosshair"));
