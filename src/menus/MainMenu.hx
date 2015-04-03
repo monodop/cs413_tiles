@@ -29,7 +29,7 @@ class MainMenu extends MenuState
 	private var tilemap:Tilemap;
 	
 	private var selection:Int;
-	private var numOptions:Int = 2;
+	private var numOptions:Int = 3;
 	
 	public function new(rootSprite:Sprite) 
 	{
@@ -54,7 +54,7 @@ class MainMenu extends MenuState
 		title.vAlign = "top";
 		addChild(title);
 		
-		options = new TextField(200, 200, "New Game\n\nCredits", BitmapFont.MINI, 20, 0x000000);
+		options = new TextField(200, 200, "New Game\n\nHow to Play\n\nCredits", BitmapFont.MINI, 20, 0x000000);
 		options.x = 120;
 		options.y = 120;
 		options.vAlign = "top";
@@ -87,8 +87,8 @@ class MainMenu extends MenuState
 		
 		if(action.isActive()) {
 			
-			if (++selection >= numOptions)
-				selection = 0;
+			if (--selection < 0)
+				selection = numOptions - 1;
 				
 			var t = new Tween(ship, 0.5, "easeInOut");
 			t.animate("y", selection * 40 + 130);
@@ -100,8 +100,9 @@ class MainMenu extends MenuState
 	function down(action:ControlAction) {
 		
 		if(action.isActive()) {
-			if (--selection < 0)
-				selection = numOptions - 1;
+				
+			if (++selection >= numOptions)
+				selection = 0;
 				
 			var t = new Tween(ship, 0.5, "easeInOut");
 			t.animate("y", selection * 40 + 130);
@@ -116,9 +117,12 @@ class MainMenu extends MenuState
 			
 			if(selection == 0)
 				stop();
-			else {
+			else if(selection == 2) {
 				pause();
 				transitionOut(function() { var credits = new CreditsMenu(rootSprite, this); credits.start(); } );
+			} else {
+				pause();
+				transitionOut(function() { var tut = new TutorialMenu(rootSprite, this); tut.start(); } );
 			}
 			
 		}
