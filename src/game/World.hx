@@ -18,6 +18,7 @@ import utility.ControlManager.ControlAction;
 import utility.Point;
 import utility.HealthBar;
 import starling.events.Event;
+import starling.text.TextField;
 
 class World extends Sprite {
 	/* The 'perfect' update time, used to modify velocities in case
@@ -42,8 +43,11 @@ class World extends Sprite {
 	public var quadTree:Quadtree;
 	private var collisionMatrix:CollisionMatrix;
 	
+	private var pointText:TextField;
 	private var healthBar:HealthBar;
 	private var energyBar:HealthBar;
+	
+	private var pointCounter:Int = 0;
 	
 	private var directionTriangles:Array<Image>;
 	
@@ -118,9 +122,18 @@ class World extends Sprite {
 	public function addedToStage(){
 		// Create a health bar
 		healthBar = new HealthBar(600,10,Root.assets.getTexture("greenpixel"));
-		healthBar.x = this.stage.stageWidth/2 - healthBar.width/2;
 		healthBar.y = 20;
+		healthBar.x = this.stage.stageWidth/2 - healthBar.width/2;
 		menustate.addChild(healthBar);
+		
+		// Create a point counter
+		pointText = new TextField(200,50,"Score: 0","BitmapFont.MINI");
+		pointText.y = 10;
+		pointText.x = this.stage.stageWidth - pointText.width - 30;
+		pointText.color = 0xFFFFFF;
+		pointText.fontSize = 18;
+		pointText.hAlign = "right";
+		menustate.addChild(pointText);
 	}
 	
 	public function addMovable(obj:SimpleMovable) {
@@ -149,6 +162,8 @@ class World extends Sprite {
 					explosion.y = ship.y;
 					explosion.rotation = ship.rotation;
 				this.addChild(explosion);
+				pointCounter += ship.worthPoints;
+				pointText.text = "Score: " + pointCounter;
 			}
 		}
 	}
