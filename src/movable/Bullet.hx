@@ -6,6 +6,7 @@ import colliders.CollisionInformation;
 import colliders.HasCollider;
 import utility.Point;
 import game.World;
+import game.Explosion;
 import starling.textures.Texture;
 
 class Bullet extends SimpleMovable {
@@ -40,6 +41,12 @@ class Bullet extends SimpleMovable {
 			if (ship != shooter){
 				forceDespawn = true;
 				ship.dealDamage(1);
+				
+				var explosion:Explosion = new Explosion("explosions/ship_hit_", 20);
+					explosion.x = ship.x;
+					explosion.y = ship.y;
+				this.parent.addChild(explosion);
+				
 				return true;
 			}
 		}

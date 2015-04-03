@@ -6,6 +6,7 @@ import starling.textures.Texture;
 import cmath.Vector;
 import utility.Utils;
 import flash.geom.Point;
+import game.Explosion;
 
 class Ship extends SimpleMovable {
 
@@ -191,6 +192,11 @@ class Ship extends SimpleMovable {
 					
 				bulletList.push(newBullet);
 				world.addMovable(newBullet);
+				
+				var explosion:Explosion = new Explosion("explosions/pirate_cannon_shot_", 20);
+					explosion.x = cannonPos.x;
+					explosion.y = cannonPos.y;
+				this.parent.addChild(explosion);
 			}
 		}
 	}
