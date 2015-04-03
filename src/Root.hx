@@ -59,6 +59,11 @@ class Root extends Sprite {
 		assets = new AssetManager();
 		assets.enqueue("assets/spritesheet.png");
 		assets.enqueue("assets/spritesheet.xml");
+		
+		assets.enqueue("assets/sound/cry.mp3");
+		assets.enqueue("assets/sound/cry2.mp3");
+		assets.enqueue("assets/sound/cry3.mp3");
+		assets.enqueue("assets/sound/PirateGameAnthem.mp3");
 			
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {
@@ -67,10 +72,17 @@ class Root extends Sprite {
 				Starling.current.showStats = true;
 				//menu.start();
 				
+				playMusic(null);
 				var menu = new MainMenu(rootSprite);
 				menu.start();
 			}
 		});
 		
+	}
+	
+	public function playMusic(e:flash.events.Event){
+		var musicChannel = Root.assets.playSound("PirateGameAnthem");
+		musicChannel.addEventListener(flash.events.Event.SOUND_COMPLETE, playMusic);
+		musicChannel.soundTransform = new SoundTransform(0.05, 0.05);
 	}
 }

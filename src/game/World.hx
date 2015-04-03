@@ -200,6 +200,12 @@ class World extends Sprite {
 				pointText.text = "Score: " + scoreCounter;
 				spawnShip();
 			}
+			
+			var pirateShanty = Math.round(Math.random()*3);
+			
+			if(pirateShanty < 3){
+				Root.assets.playSound("cry" + pirateShanty);
+			}
 		}
 	}
 	

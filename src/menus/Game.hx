@@ -7,6 +7,8 @@ import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.EnterFrameEvent;
 
+import flash.media.Sound;
+
 import game.World;
 import utility.ControlManager.ControlAction;
 import movable.*;
@@ -26,7 +28,8 @@ class Game extends MenuState {
 		
 		world.x = centerX;
 		world.y = centerY;
-	}
+	}	
+	
 	
 	override function awake() {
 		this.addEventListener(EnterFrameEvent.ENTER_FRAME, enterFrame);
