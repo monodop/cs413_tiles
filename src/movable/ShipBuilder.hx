@@ -94,6 +94,7 @@ class ShipBuilder{
 		ship.addFlag(FLAG_ENGLISH, 1, 13, 66, 24);
 		ship.addFlag(FLAG_ENGLISH, 1, 13, 89, 24);
 		
+		ship.worthPoints = 2;
 		ship.deathAnimationStr = "ships/big_ship_sink_";
 		return ship;
 	}
