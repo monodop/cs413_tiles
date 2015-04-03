@@ -66,8 +66,8 @@ class World extends Sprite {
 		collisionMatrix.enableCollisions("ship", ["projectile"]);
 		
 		// Prepare the tilemap
-		//tilemap = new Tilemap(this, 100, 100);
-		//addChild(tilemap);
+		tilemap = new Tilemap(this, 100, 100);
+		addChild(tilemap);
 		
 		// Populate the shipbuilder's static resources
 		ShipBuilder.populateResources();
@@ -197,7 +197,7 @@ class World extends Sprite {
 		camera.applyCamera(this);
 		
 		// Update the tilemap
-		//tilemap.update(event, camera);
+		tilemap.update(event, camera);
 	}
 	
 	
