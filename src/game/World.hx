@@ -14,6 +14,7 @@ import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
 import starling.events.Touch;
 import starling.events.TouchEvent;
+import starling.text.BitmapFont;
 import utility.ControlManager.ControlAction;
 import utility.Point;
 import utility.HealthBar;
@@ -127,7 +128,7 @@ class World extends Sprite {
 		menustate.addChild(healthBar);
 		
 		// Create a point counter
-		pointText = new TextField(200,50,"Score: 0","BitmapFont.MINI");
+		pointText = new TextField(200,50,"Score: 0", BitmapFont.MINI);
 		pointText.y = 10;
 		pointText.x = this.stage.stageWidth - pointText.width - 30;
 		pointText.color = 0xFFFFFF;
