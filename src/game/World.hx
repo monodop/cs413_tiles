@@ -50,7 +50,8 @@ class World extends Sprite {
 	private var energyBar:HealthBar;
 	
 	public var pointCounter:Int = 0;
-	
+	public var scoreCounter:Int = 0;
+	private var absoluteMaxShips:Int = 7;
 	private var directionTriangles:Array<Image>;
 	
 	public function new (menustate:MenuState) {
@@ -88,12 +89,15 @@ class World extends Sprite {
 		// Create an enemy ship
 		var ship = ShipBuilder.getLargeEnglishShip(this, 31);
 		ship.setPath([new Point(15,15), new Point(40,15), new Point(40,40), new Point(15,40)]);
+		ship.x = ship.y = 90;
 		a_Ship.push(ship);
 		
-		// Create an enemy ship
+		/* Create an enemy ship
 		ship = ShipBuilder.getCourrierShip(this, 3);
 		ship.setPath([new Point(27,31), new Point(10,15), new Point(25,25), new Point(50,50)]);
-		a_Ship.push(ship);
+		a_Ship.push(ship);*/
+		
+		spawnShip();
 		
 		// Create the player ship
 		playerShip = ShipBuilder.getPirateShip(this, 3);
@@ -123,14 +127,14 @@ class World extends Sprite {
 	
 	public function addedToStage(){
 		// Create a health bar
-		healthBar = new HealthBar(600,10,Root.assets.getTexture("greenpixel"));
-		healthBar.y = 20;
+		healthBar = new HealthBar(300,10,Root.assets.getTexture("greenpixel"));
+		healthBar.y = 10;
 		healthBar.x = this.stage.stageWidth/2 - healthBar.width/2;
 		menustate.addChild(healthBar);
 		
 		// Create a point counter
 		pointText = new TextField(200,50,"Score: 0", BitmapFont.MINI);
-		pointText.y = 10;
+		pointText.y = 5;
 		pointText.x = this.stage.stageWidth - pointText.width - 30;
 		pointText.color = 0xFFFFFF;
 		pointText.fontSize = 18;
@@ -151,6 +155,30 @@ class World extends Sprite {
 		removeChild(obj);
 	}
 	
+	public function spawnShip(){
+		var maxShips = Math.floor(scoreCounter / 5 + 2);
+			maxShips = maxShips > absoluteMaxShips ? absoluteMaxShips : maxShips;
+		
+		var spawnCount = maxShips - a_Ship.length;
+		var largeThreshold = (maxShips/absoluteMaxShips) * 0.4 + 0.2;
+		for(i in 0...spawnCount){
+			var ship;
+			ship = (Math.random() > largeThreshold) ? ShipBuilder.getCourrierShip(this) : ShipBuilder.getLargeEnglishShip(this);
+			
+			var pathArray:Array<Point> = new Array<Point>();
+			for(i in 0...4){
+				pathArray.push(new Point(Math.random()*100, Math.random()*100));
+			}
+			ship.x = pathArray[0].x;
+			ship.y = pathArray[0].y;
+			ship.rotation = Math.random()*Math.PI*2;
+			ship.setPath(pathArray);
+			a_Ship.push(ship);
+			addChild(ship);
+			addMovable(ship);
+		}
+	}
+	
 	public function destroyShip(ship:Ship){
 		if(ship == playerShip){
 			trace('player dead');
@@ -165,7 +193,9 @@ class World extends Sprite {
 					explosion.rotation = ship.rotation;
 				this.addChild(explosion);
 				pointCounter += ship.worthPoints;
-				pointText.text = "Score: " + pointCounter;
+				scoreCounter += ship.worthPoints;
+				pointText.text = "Score: " + scoreCounter;
+				spawnShip();
 			}
 		}
 	}
@@ -190,12 +220,9 @@ class World extends Sprite {
 		// Attack the closest in range ship
 		playerShip.tryPredictiveFireAtShips(globalTime, a_Ship, bulletList, 1.0);
 		
-		if(healthBar.getBarSpan() > playerShip.getHealthRatio()){
-			healthBar.flashColor(0x00FF00, 30);
-		}
-		
 		healthBar.setBarSpan(playerShip.getHealthRatio());
 		playerShip.healShip(0.005);
+		
 		// Update ship velocities
 		playerShip.applyVelocity(modifier);
 		for(ship in a_Ship){
@@ -205,7 +232,6 @@ class World extends Sprite {
 		
 		// Loop through the bullet list and either despawn, or apply velocity to them
 		for (bullet in bulletList) {
-			
 			var ci = new Array<CollisionInformation>();
 			var colliders = bullet.getColliders();
 			var collide = checkCollision(colliders[0], ci);
@@ -221,6 +247,7 @@ class World extends Sprite {
 		for (img in directionTriangles) {
 			img.removeFromParent();
 		}
+		
 		while(directionTriangles.length < a_Ship.length) {
 			var img = new Image(Root.assets.getTexture("gui/arrow"));
 			img.smoothing = 'none';
