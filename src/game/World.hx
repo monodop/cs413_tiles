@@ -13,6 +13,8 @@ import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
 import utility.ControlManager.ControlAction;
 import utility.Point;
+import utility.HealthBar;
+import starling.events.Event;
 
 class World extends Sprite {
 	/* The 'perfect' update time, used to modify velocities in case
@@ -36,6 +38,9 @@ class World extends Sprite {
 	
 	public var quadTree:Quadtree;
 	private var collisionMatrix:CollisionMatrix;
+	
+	private var healthBar:HealthBar;
+	private var energyBar:HealthBar;
 	
 	public function new (menustate:MenuState) {
 		super();
@@ -73,7 +78,7 @@ class World extends Sprite {
 		a_Ship.push(ship);
 		
 		// Create an enemy ship
-		ship = ShipBuilder.getPirateShip(this, 3);
+		ship = ShipBuilder.getCourrierShip(this, 3);
 		ship.setPath([new Point(27,31), new Point(10,15), new Point(25,25), new Point(50,50)]);
 		a_Ship.push(ship);
 		
@@ -97,6 +102,16 @@ class World extends Sprite {
 		addChild(pointImage);
 		for(ship in a_Ship)
 			addMovable(ship);
+			
+		this.addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+	}
+	
+	public function addedToStage(){
+		// Create a health bar
+		healthBar = new HealthBar(600,10,Root.assets.getTexture("greenpixel"));
+		healthBar.x = this.stage.stageWidth/2 - healthBar.width/2;
+		healthBar.y = 20;
+		this.stage.addChild(healthBar);
 	}
 	
 	public function addMovable(obj:SimpleMovable) {
@@ -110,6 +125,16 @@ class World extends Sprite {
 			collider.quadTree.remove(collider, true);
 		}
 		removeChild(obj);
+	}
+	
+	public function destroyShip(ship:Ship){
+		if(ship == playerShip){
+			trace('player dead');
+		} else {
+			//trace('enemy dead');
+			a_Ship.remove(ship);
+			removeMovable(ship);
+		}
 	}
 	
 	public function update(event:EnterFrameEvent) {
@@ -131,7 +156,13 @@ class World extends Sprite {
 		
 		// Attack the closest in range ship
 		playerShip.tryPredictiveFireAtShips(globalTime, a_Ship, bulletList, 1.0);
-
+		
+		if(healthBar.getBarSpan() > playerShip.getHealthRatio()){
+			healthBar.flashColor(0x00FF00, 30);
+		}
+		
+		healthBar.setBarSpan(playerShip.getHealthRatio());
+		playerShip.healShip(0.005);
 		// Update ship velocities
 		playerShip.applyVelocity(modifier);
 		for(ship in a_Ship){
@@ -148,7 +179,7 @@ class World extends Sprite {
 			
 			if(!collide && !bullet.shouldDespawn(globalTime)){
 				bullet.applyVelocity(modifier);
-			} else if(!bullet.shouldDespawn(globalTime)) {
+			} else if(bullet.shouldDespawn(globalTime)) {
 				bulletList.remove(bullet);
 				removeMovable(bullet);
 			}
@@ -161,12 +192,6 @@ class World extends Sprite {
 		// Update the tilemap
 		//tilemap.update(event, camera);
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	

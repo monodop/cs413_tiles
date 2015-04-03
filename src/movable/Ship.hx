@@ -25,6 +25,8 @@ class Ship extends SimpleMovable {
 	public var turnFix:Bool = true;
 	private var flags:Array<Image>;
 	private var arriveCB:Void->Void = null;
+	private var health:Float = 15;
+	private var maxHealth:Float = 15;
 	
 	public function new(texture:Texture, world:World, maxSpeed, maxAngle){
 		super(texture, world);
@@ -36,7 +38,6 @@ class Ship extends SimpleMovable {
 	}
 	
 	public function addFlag(flagTexture:Texture, flagCenterX:Float, flagCenterY:Float, shipPositionX:Float, shipPositionY:Float) {
-		
 		var flag = new Image(flagTexture);
 		flag.smoothing = 'none';
 		flag.pivotX = 18;
@@ -81,6 +82,34 @@ class Ship extends SimpleMovable {
 	/** Makes the boat continue in the direction it is currently going */
 	public function holdSpeed(){
 		this.normalMove = true;
+	}
+	
+	public function getHealthRatio():Float{
+		return health / maxHealth;
+	}
+	
+	/** Update the max health */
+	public function setMaxHealth(health:Float){
+		this.health = this.maxHealth = health;
+	}
+	
+	/** Update the health */
+	public function healShip(heal:Float){
+		this.health += heal;
+		if(health > maxHealth){
+			health = maxHealth;
+			
+		}
+	}
+	
+	/** Deal damage to the ship */
+	public function dealDamage(damage:Float){
+		health -= damage;
+		
+		if(health <= 0){
+			health = 0;
+			world.destroyShip(this);
+		}
 	}
 	
 	/** See variable description */

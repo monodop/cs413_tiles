@@ -12,6 +12,7 @@ class Bullet extends SimpleMovable {
 	var spawnTime:Float;
 	var aliveTime:Float;
 	var shooter:SimpleMovable;
+	var forceDespawn:Bool = false;
 	
 	public function new(texture:Texture, world:World, shooter:SimpleMovable, spawnTime:Float, aliveTime:Float){
 		super(texture, world);
@@ -21,7 +22,7 @@ class Bullet extends SimpleMovable {
 	}
 	
 	public function shouldDespawn(time:Float):Bool{
-		return ((time - spawnTime) > aliveTime);
+		return forceDespawn || ((time - spawnTime) > aliveTime);
 	}
 	
 	public override function initColliders() {
@@ -35,16 +36,14 @@ class Bullet extends SimpleMovable {
 		
 		if (Std.is(owner, Ship)) {
 			var ship:Ship = cast owner;
-			if (ship == shooter)
-				return false;
-			//if(self.name == "PlayerShield") {
-				//Root.assets.playSound("ShieldHit", 0, 0, Root.sfxTransform(0.25));
-			//} else if (self.name == "PlayerTorso") {
-				//projectile.hitDamagable(this);
-				//projectile.detonate();
-				//return false;
-			//}
+			
+			if (ship != shooter){
+				forceDespawn = true;
+				ship.dealDamage(1);
+				return true;
+			}
 		}
-		return true;
+		
+		return false;
 	}
 }

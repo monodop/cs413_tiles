@@ -5,6 +5,7 @@ class ShipBuilder{
 	private static var SHIP_LARGE;
 	private static var FLAG_PIRATE;
 	private static var FLAG_ENGLISH;
+	private static var FLAG_SMALL;
 	private static var CANNON_BALL;
 	
 	public static function populateResources(){
@@ -12,11 +13,25 @@ class ShipBuilder{
 		SHIP_LARGE = Root.assets.getTexture("ships/big_ship");
 		FLAG_PIRATE  = Root.assets.getTexture("ships/pirate_flag");
 		FLAG_ENGLISH  = Root.assets.getTexture("ships/big_ship_sail_english");
+		FLAG_SMALL = Root.assets.getTexture("ships/small_ship_sail_english");
 		CANNON_BALL = Root.assets.getTexture("cannonball");
 	};
 	
 	/* Returns a pirate ship with up to two cannons */
-	public static function getPirateShip(world, cannonMask:Int = 0x3, maxSpeed:Float = 0.0833, maxTurn:Float = 0.0122, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005){
+	public static function getPirateShip(world, cannonMask:Int = 0x3, maxSpeed:Float = 0.0833, maxTurn:Float = 0.0122, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
+		var ship = getSmallShip(world,cannonMask,maxSpeed,maxTurn,turnFix,breakPower,acceleration);
+		ship.addFlag(FLAG_PIRATE, 18, 12, 18, 12);
+		return ship;
+	}
+	
+	/* Returns a small ship with up to two cannons */
+	public static function getCourrierShip(world, cannonMask:Int = 0x3, maxSpeed:Float = 0.0833, maxTurn:Float = 0.0122, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
+		var ship = getSmallShip(world,cannonMask,maxSpeed,maxTurn,turnFix,breakPower,acceleration);
+		ship.addFlag(FLAG_SMALL, 18, 12, 18, 12);
+		return ship;
+	}
+	
+	private static function getSmallShip(world, cannonMask:Int = 0x3, maxSpeed:Float = 0.0833, maxTurn:Float = 0.0122, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
 		var ship = new PathingShip(SHIP_SMALL, world, maxSpeed, maxTurn);
 		ship.setBreakPower( breakPower );
 		ship.setBoatAcceleration( acceleration );
@@ -34,13 +49,11 @@ class ShipBuilder{
 			ship.addCannon(cannon, 16, 18);
 		}
 		
-		ship.addFlag(FLAG_PIRATE, 18, 12, 18, 12);
-		
 		return ship;
 	}
 	
 	/* Returns a large english ship with up to 5 cannons */
-	public static function getLargeEnglishShip(world, cannonMask:Int = 0x31, maxSpeed:Float = 0.075, maxTurn:Float = 0.0061, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005){
+	public static function getLargeEnglishShip(world, cannonMask:Int = 0x31, maxSpeed:Float = 0.075, maxTurn:Float = 0.0061, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
 		var ship = new PathingShip(SHIP_LARGE, world, maxSpeed, maxTurn);
 		ship.setBreakPower( breakPower );
 		ship.setBoatAcceleration( acceleration );
