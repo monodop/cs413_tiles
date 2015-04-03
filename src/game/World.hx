@@ -42,6 +42,8 @@ class World extends Sprite {
 	private var healthBar:HealthBar;
 	private var energyBar:HealthBar;
 	
+	private var directionTriangles:Array<Image>;
+	
 	public function new (menustate:MenuState) {
 		super();
 		
@@ -71,6 +73,8 @@ class World extends Sprite {
 		
 		// Populate the shipbuilder's static resources
 		ShipBuilder.populateResources();
+		
+		directionTriangles = new Array<Image>();
 				
 		// Create an enemy ship
 		var ship = ShipBuilder.getLargeEnglishShip(this, 31);
@@ -111,7 +115,7 @@ class World extends Sprite {
 		healthBar = new HealthBar(600,10,Root.assets.getTexture("greenpixel"));
 		healthBar.x = this.stage.stageWidth/2 - healthBar.width/2;
 		healthBar.y = 20;
-		this.stage.addChild(healthBar);
+		menustate.addChild(healthBar);
 	}
 	
 	public function addMovable(obj:SimpleMovable) {
@@ -192,9 +196,40 @@ class World extends Sprite {
 			}
 		}
 		
+		for (img in directionTriangles) {
+			img.removeFromParent();
+		}
+		while(directionTriangles.length < a_Ship.length) {
+			var img = new Image(Root.assets.getTexture("gui/arrow"));
+			img.smoothing = 'none';
+			img.pivotX = img.width / 2;
+			img.pivotY = img.height / 2;
+			directionTriangles.push(img);
+		}
+		
 		// Update the camera object
 		camera.moveTowards(playerShip.x, playerShip.y);
 		camera.applyCamera(this);
+		
+		var camBounds = camera.getCameraBounds(this, -4);
+		var player_pos = new Point(playerShip.x, playerShip.y);
+		var dir:Point;
+		var hitPt:Point;
+		var i = 0;
+		for (ship in a_Ship) {
+			if (ship.x > camBounds.right || ship.x < camBounds.left ||
+				ship.y > camBounds.bottom || ship.y < camBounds.top) {
+					dir = new Point(ship.x, ship.y).sub(player_pos);
+					hitPt = PolygonCollider.rectangleIntersection(camBounds, player_pos, dir);
+					if(hitPt != null) {
+						hitPt = Point.fromPoint(getTransformationMatrix(menustate).transformPoint(hitPt.toGeom()));
+						directionTriangles[i].x = hitPt.x;
+						directionTriangles[i].y = hitPt.y;
+						directionTriangles[i].rotation = dir.angle();
+						menustate.addChild(directionTriangles[i++]);
+					}
+				}
+		}
 		
 		// Update the tilemap
 		tilemap.update(event, camera);
