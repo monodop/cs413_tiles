@@ -204,9 +204,12 @@ class World extends Sprite {
 			}
 			
 			var pirateShanty = lastShanty;
-			while((pirateShanty = Math.round(Math.random()*2)) != lastShanty){
-				Root.assets.playSound("cry" + pirateShanty);
+			while(pirateShanty == lastShanty){
+				pirateShanty = Math.round(Math.random()*2.49);
 			}
+			
+			lastShanty = pirateShanty;
+			Root.assets.playSound("cry" + pirateShanty);
 		}
 	}
 	

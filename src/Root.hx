@@ -86,6 +86,6 @@ class Root extends Sprite {
 	public function playMusic(e:flash.events.Event){
 		var musicChannel = Root.assets.playSound("PirateGameAnthem");
 		musicChannel.addEventListener(flash.events.Event.SOUND_COMPLETE, playMusic);
-		musicChannel.soundTransform = new SoundTransform(0.01, 0.01);
+		musicChannel.soundTransform = new SoundTransform(0.1, 0.1);
 	}
 }
