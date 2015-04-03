@@ -43,6 +43,8 @@ class Root extends Sprite {
 		controls.registerAction("hold", Keyboard.SPACE);
 		controls.registerAction("break", Keyboard.Z);
 		
+		controls.registerAction("menu", Keyboard.ESCAPE);
+		
 		controls.registerAction("quadtreevis", Keyboard.F1);
 		
 		Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, controls.keyDown);
@@ -59,7 +61,6 @@ class Root extends Sprite {
 			if (ratio == 1) {
 				startup.removeChild(startup.loadingBitmap);
 				var menu = new Game(rootSprite);
-				Starling.current.stage.addEventListener(TouchEvent.TOUCH, menu.onTouch);
 				Starling.current.showStats = true;
 				menu.start();
 			}

@@ -5,12 +5,15 @@ import flash.geom.Rectangle;
 import game.tilemap.Tilemap;
 import menus.MenuState;
 import menus.QuadTreeVis;
+import menus.UpgradeMenu;
 import movable.*;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.display.Quad;
 import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
+import starling.events.Touch;
+import starling.events.TouchEvent;
 import utility.ControlManager.ControlAction;
 import utility.Point;
 import utility.HealthBar;
@@ -92,7 +95,9 @@ class World extends Sprite {
 		playerShip.goTo(5,5);
 		
 		// Set up the point image which will display on mouse click
-		pointImage = new Image(Root.assets.getTexture("point"));
+		pointImage = new Image(Root.assets.getTexture("gui/crosshair"));
+		pointImage.smoothing = 'none';
+		pointImage.alpha = 0.50;
 		pointImage.width = pointImage.height = 5;
 		pointImage.pivotX = pointImage.width/2.0;
 		pointImage.pivotY = pointImage.height/2.0;
@@ -239,9 +244,44 @@ class World extends Sprite {
 	
 	public function awake() {
 		Root.controls.hook("quadtreevis", "quadTreeVis", quadTreeVis);
+		Root.controls.hook("menu", "openMenu", openMenu);
+		Starling.current.stage.addEventListener(TouchEvent.TOUCH, onTouch);
 	}
 	public function sleep() {
 		Root.controls.unhook("quadtreevis", "quadTreeVis");
+		Root.controls.unhook("menu", "openMenu");
+		Starling.current.stage.removeEventListener(TouchEvent.TOUCH, onTouch);
+	}
+	
+	public function openMenu(action:ControlAction) {
+		
+		if(action.isActive()) {
+			var menu = new UpgradeMenu(menustate.rootSprite, this);
+			menu.start();
+			
+			menustate.pause();
+		}
+		
+	}
+	
+	var lastTouch:Touch;
+	public function onTouch( event:TouchEvent ) {
+		
+		var touch:Touch = event.touches[0];
+		lastTouch = touch;
+		if (touch.phase == "ended") {
+			var dest = touch.getLocation(this);
+			playerShip.goTo(dest.x,dest.y);
+			pointImage.x = dest.x;
+			pointImage.y = dest.y;
+		}
+			
+	}
+	
+	public function closeMenu() {
+		
+		menustate.start();
+		
 	}
 	
 	// Pass a collider of something you want to test the collision of (the player's ship for example).

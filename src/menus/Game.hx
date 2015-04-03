@@ -43,18 +43,6 @@ class Game extends MenuState {
 		this.dispose();
 	}
 	
-	var lastTouch:Touch;
-	public function onTouch( event:TouchEvent ){
-		var touch:Touch = event.touches[0];
-		lastTouch = touch;
-		if (touch.phase == "ended") {
-			var dest = touch.getLocation(world);
-			world.playerShip.goTo(dest.x,dest.y);
-			world.pointImage.x = dest.x;
-			world.pointImage.y = dest.y;
-		}
-	}
-	
 	function enterFrame(event:EnterFrameEvent) {
 		world.update(event);
 	}
