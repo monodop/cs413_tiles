@@ -28,6 +28,7 @@ class Ship extends SimpleMovable {
 	private var arriveCB:Void->Void = null;
 	private var health:Float = 15;
 	private var maxHealth:Float = 15;
+	public var deathAnimationStr:String = null;
 	
 	public function new(texture:Texture, world:World, maxSpeed, maxAngle){
 		super(texture, world);

@@ -131,9 +131,16 @@ class World extends Sprite {
 		if(ship == playerShip){
 			trace('player dead');
 		} else {
-			//trace('enemy dead');
 			a_Ship.remove(ship);
 			removeMovable(ship);
+			
+			if(ship.deathAnimationStr != null){
+				var explosion:Explosion = new Explosion(ship.deathAnimationStr, 15);
+					explosion.x = ship.x;
+					explosion.y = ship.y;
+					explosion.rotation = ship.rotation;
+				this.addChild(explosion);
+			}
 		}
 	}
 	
