@@ -154,7 +154,7 @@ class Ship extends SimpleMovable {
 				
 				var fireVector = Vector.getVector(cannonPos.x, cannonPos.y, targetX, targetY).normalize().multiply(cannon.bulletSpeed);
 				
-				var newBullet = new Bullet(cannon.bulletTexture, world, time, 10000);
+				var newBullet = new Bullet(cannon.bulletTexture, world, this, time, 10000);
 					newBullet.vx = fireVector.vx;
 					newBullet.vy = fireVector.vy;
 					newBullet.x = cannonPos.x;

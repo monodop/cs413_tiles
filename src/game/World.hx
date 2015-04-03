@@ -52,6 +52,14 @@ class World extends Sprite {
 		// Prepare the quadtree
 		quadTree = new Quadtree(this, new Rectangle( -0.5, -0.5, 100, 100));
 		
+		// Prepare the collision matrix
+		collisionMatrix = new CollisionMatrix();
+		collisionMatrix.registerLayer("map");
+		collisionMatrix.registerLayer("ship");
+		collisionMatrix.registerLayer("projectile");
+		collisionMatrix.enableCollisions("map", ["ship", "projectile"]);
+		collisionMatrix.enableCollisions("ship", ["projectile"]);
+		
 		// Prepare the tilemap
 		//tilemap = new Tilemap(this, 100, 100);
 		//addChild(tilemap);
@@ -85,19 +93,10 @@ class World extends Sprite {
 		pointImage.scaleY = 1 / tileSize;
 		
 		/* Add display objects to the world */
-		//addChild(playerShip);
 		addMovable(playerShip);
 		addChild(pointImage);
 		for(ship in a_Ship)
 			addMovable(ship);
-		
-		// Set up the colliders
-		//for (collider in playerShip.getColliders())
-			//this.quadTree.insert(collider);
-		//for (ship in a_Ship) {
-			//for (collider in ship.getColliders())
-				//this.quadTree.insert(collider);
-		//}
 	}
 	
 	public function addMovable(obj:SimpleMovable) {
@@ -141,10 +140,15 @@ class World extends Sprite {
 		}
 		
 		// Loop through the bullet list and either despawn, or apply velocity to them
-		for(bullet in bulletList){
-			if(!bullet.shouldDespawn(globalTime)){
+		for (bullet in bulletList) {
+			
+			var ci = new Array<CollisionInformation>();
+			var colliders = bullet.getColliders();
+			var collide = checkCollision(colliders[0], ci);
+			
+			if(!collide && !bullet.shouldDespawn(globalTime)){
 				bullet.applyVelocity(modifier);
-			} else {
+			} else if(!bullet.shouldDespawn(globalTime)) {
 				bulletList.remove(bullet);
 				removeMovable(bullet);
 			}
