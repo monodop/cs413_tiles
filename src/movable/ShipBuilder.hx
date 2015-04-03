@@ -39,13 +39,13 @@ class ShipBuilder{
 		
 		// Left cannon
 		if(cannonMask & 0x1 != 0){
-			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 4, 10, 2500);
+			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 4, 10, fireSpeed);
 			ship.addCannon(cannon, 16, 6);
 		}
 		
 		// Right cannon
 		if(cannonMask & 0x2 != 0){
-			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 4, 10, 2500);
+			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 4, 10, fireSpeed);
 			ship.addCannon(cannon, 16, 18);
 		}
 		
