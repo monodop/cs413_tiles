@@ -37,8 +37,8 @@ class Tile extends Sprite implements HasCollider
 		this.sprite = new Image(Root.assets.getTexture(asset));
 		this.sprite.pivotX = this.sprite.width / 2.0;
 		this.sprite.pivotY = this.sprite.height / 2.0;
-		this.sprite.scaleX = 1.0 / tilemap.world.tileSize;
-		this.sprite.scaleY = 1.0 / tilemap.world.tileSize;
+		this.sprite.scaleX = 1.0 / tilemap.tileSize;
+		this.sprite.scaleY = 1.0 / tilemap.tileSize;
 		this.sprite.smoothing = 'none';
 		addChild(sprite);
 		

@@ -80,8 +80,8 @@ class GameOverMenu extends MenuState
 		removeFromParent();
 		dispose();
 		
-		gameState = new Game(rootSprite);
-		gameState.start();
+		var menu = new MainMenu(rootSprite);
+		menu.start();
 	}
 	
 	private override function transitionIn(?callback:Void->Void) {

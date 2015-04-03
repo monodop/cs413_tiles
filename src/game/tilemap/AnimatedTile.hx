@@ -19,8 +19,8 @@ class AnimatedTile extends Tile
 		this.animSprite = new MovieClip(Root.assets.getTextures(asset));
 		this.animSprite.pivotX = this.animSprite.width / 2.0;
 		this.animSprite.pivotY = this.animSprite.height / 2.0;
-		this.animSprite.scaleX = 1.0 / tilemap.world.tileSize;
-		this.animSprite.scaleY = 1.0 / tilemap.world.tileSize;
+		this.animSprite.scaleX = 1.0 / tilemap.tileSize;
+		this.animSprite.scaleY = 1.0 / tilemap.tileSize;
 		this.animSprite.smoothing = 'none';
 		this.animSprite.loop = true;
 		this.animSprite.play();

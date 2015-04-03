@@ -77,7 +77,7 @@ class World extends Sprite {
 		collisionMatrix.enableCollisions("ship", ["projectile"]);
 		
 		// Prepare the tilemap
-		tilemap = new Tilemap(this, 100, 100);
+		tilemap = new Tilemap(100, 100, tileSize);
 		addChild(tilemap);
 		
 		// Populate the shipbuilder's static resources

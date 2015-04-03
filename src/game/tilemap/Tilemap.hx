@@ -13,18 +13,21 @@ class Tilemap extends Sprite
 	public var sizeX:Int = 0;
 	public var sizeY:Int = 0;
 	
-	public var world:World;
+	public var tileSize:Float;
+	
+	//public var world:World;
 	private var tiles:Vector<Vector<Tile>>;
 	private var bigTiles:Vector<Vector<Sprite>>;
 	private static var bigTileSize:Int = 5;
 	
-	public function new(world:World, sizeX:Int, sizeY:Int) 
+	public function new(sizeX:Int, sizeY:Int, tileSize:Float) 
 	{
 		super();
 		
+		this.tileSize = tileSize;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
-		this.world = world;
+		//this.world = world;
 		
 		// Generate bigTiles arrays
 		bigTiles = new Vector<Vector<Sprite>>(Math.ceil(sizeX / bigTileSize));

@@ -44,6 +44,8 @@ class Root extends Sprite {
 		controls.registerAction("break", Keyboard.Z);
 		
 		controls.registerAction("menu", Keyboard.ESCAPE);
+		controls.bindKey("menu", Keyboard.ENTER);
+		
 		controls.registerAction("retire", Keyboard.R);
 		
 		controls.registerAction("quadtreevis", Keyboard.F1);
@@ -61,8 +63,11 @@ class Root extends Sprite {
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {
 				startup.removeChild(startup.loadingBitmap);
-				var menu = new Game(rootSprite);
+				//var menu = new Game(rootSprite);
 				Starling.current.showStats = true;
+				//menu.start();
+				
+				var menu = new MainMenu(rootSprite);
 				menu.start();
 			}
 		});
