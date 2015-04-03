@@ -89,8 +89,6 @@ class MainMenu extends MenuState
 			
 			if (++selection >= numOptions)
 				selection = 0;
-			
-			trace(selection);
 				
 			var t = new Tween(ship, 0.5, "easeInOut");
 			t.animate("y", selection * 40 + 130);
@@ -104,8 +102,6 @@ class MainMenu extends MenuState
 		if(action.isActive()) {
 			if (--selection < 0)
 				selection = numOptions - 1;
-			
-			trace(selection);
 				
 			var t = new Tween(ship, 0.5, "easeInOut");
 			t.animate("y", selection * 40 + 130);
@@ -118,7 +114,12 @@ class MainMenu extends MenuState
 		
 		if (action.isActive()) {
 			
-			stop();
+			if(selection == 0)
+				stop();
+			else {
+				pause();
+				transitionOut(function() { var credits = new CreditsMenu(rootSprite, this); credits.start(); } );
+			}
 			
 		}
 		
@@ -131,8 +132,6 @@ class MainMenu extends MenuState
 			game.start();
 		}
 		
-		removeFromParent();
-		dispose();
 		
 	}
 	
@@ -163,12 +162,32 @@ class MainMenu extends MenuState
 		}
 		Starling.juggler.add(tween);
 	}
+	public function creditTransitionIn(?callback:Void->Void) {
+		
+		ship.x = -ship.width;
+		var tween = new Tween(ship, 1.5, "easeInOut");
+		tween.animate("x", 80);
+		tween.onComplete = function() { callback(); };
+		Starling.juggler.add(tween);
+		
+		tween = new Tween(title, 1.0, "easeInOut");
+		tween.animate("y", 40);
+		Starling.juggler.add(tween);
+		
+		tween = new Tween(options, 1.0, "easeInOut");
+		tween.animate("x", 120);
+		Starling.juggler.add(tween);
+		
+	}
 	private override function transitionOut(?callback:Void->Void) {
 		
 		var tween = new Tween(ship, 2.0, "easeInOut");
-		tween.animate("x", 256);
-		if(selection == 0)
+		if(selection == 0) {
+			tween.animate("x", 256);
 			tween.animate("y", 192);
+		} else {
+			tween.animate("x", 512 + ship.width);
+		}
 		tween.onComplete = function() {
 			callback();
 		}
@@ -178,7 +197,7 @@ class MainMenu extends MenuState
 		tween.animate("y", -100);
 		Starling.juggler.add(tween);
 		
-		tween = new Tween(options, 1.0, "easeInOut");
+		tween = new Tween(options, 1.5, "easeInOut");
 		tween.animate("x", -options.width);
 		Starling.juggler.add(tween);
 	}
