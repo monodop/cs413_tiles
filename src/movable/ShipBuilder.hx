@@ -54,38 +54,38 @@ class ShipBuilder{
 	}
 	
 	/* Returns a large english ship with up to 5 cannons */
-	public static function getLargeEnglishShip(world, cannonMask:Int = 0x31, maxSpeed:Float = 0.075, maxTurn:Float = 0.0061, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
+	public static function getLargeEnglishShip(world, cannonMask:Int = 31, maxSpeed:Float = 0.075, maxTurn:Float = 0.0061, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
 		var ship = new PathingShip(SHIP_LARGE, world, maxSpeed, maxTurn);
 		ship.setBreakPower( breakPower );
 		ship.setBoatAcceleration( acceleration );
 		ship.turnFix = turnFix;
 		
 		// Front Left cannon
-		if(cannonMask & 0x1 != 0){
+		if(cannonMask & 1 != 0){
 			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 8, 20, 1000);
 			ship.addCannon(cannon, 80, 10);
 		}
 		
 		// Front Right cannon
-		if(cannonMask & 0x2 != 0){
+		if(cannonMask & 2 != 0){
 			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 8, 20, 1000);
 			ship.addCannon(cannon, 80, 39);
 		}
 		
 		// Back Left cannon
-		if(cannonMask & 0x4 != 0){
+		if(cannonMask & 4 != 0){
 			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 8, 20, 1000);
 			ship.addCannon(cannon, 40, 10);
 		}
 		
 		// Back Right cannon
-		if(cannonMask & 0x8 != 0){
+		if(cannonMask & 8 != 0){
 			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 8, 20, 1000);
 			ship.addCannon(cannon, 40, 39);
 		}
 		
 		// Rear cannon
-		if(cannonMask & 0x16 != 0){
+		if(cannonMask & 16 != 0){
 			var cannon = new Cannon(CANNON_BALL, 0, Math.PI / 8, 50, 1000);
 			ship.addCannon(cannon, 6, 24);
 		}
@@ -97,5 +97,17 @@ class ShipBuilder{
 		ship.worthPoints = 2;
 		ship.deathAnimationStr = "ships/big_ship_sink_";
 		return ship;
+	}
+	
+	public function generateLargeShip(world, difficulty:Int){
+		var maxTurn 	 = 0.0051 + difficulty * (0.0061 - 0.0051) / 5;
+		var maxSpeed 	 = 0.075 + difficulty * (0.085 - 0.075) / 5;
+		var ship = getLargeEnglishShip(world, 31, maxSpeed, maxTurn, true, breakPower, acceleration);
+	}
+	
+	public function generateSmallShip(world, difficulty:Int){
+		var maxTurn 	 = 0.0051 + difficulty * (0.0061 - 0.0051) / 5;
+		var maxSpeed 	 = 0.075 + difficulty * (0.085 - 0.075) / 5;
+		var ship = getLargeEnglishShip(world, 3, maxSpeed, maxTurn, true, breakPower, acceleration);
 	}
 }
