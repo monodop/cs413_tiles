@@ -105,6 +105,7 @@ class World extends Sprite {
 		playerShip.x = 9;
 		playerShip.y = 7;
 		playerShip.goTo(9.5,7);
+		playerShip.setMaxHealth(8);
 		
 		// Set up the point image which will display on mouse click
 		pointImage = new Image(Root.assets.getTexture("gui/crosshair"));
@@ -169,7 +170,7 @@ class World extends Sprite {
 			
 			var pathArray:Array<Point> = new Array<Point>();
 			for(i in 0...4){
-				pathArray.push(new Point(Math.random()*100, Math.random()*100));
+				pathArray.push(new Point(Math.random()*80 + 10, Math.random()*80 + 10));
 			}
 			
 			ship.x = pathArray[0].x;
@@ -182,6 +183,7 @@ class World extends Sprite {
 		}
 	}
 	
+	public var lastShanty = -1;
 	public function destroyShip(ship:Ship){
 		if(ship == playerShip){
 			gameOver();
@@ -201,9 +203,8 @@ class World extends Sprite {
 				spawnShip();
 			}
 			
-			var pirateShanty = Math.round(Math.random()*3);
-			
-			if(pirateShanty < 3){
+			var pirateShanty = lastShanty;
+			while((pirateShanty = Math.round(Math.random()*2)) != lastShanty){
 				Root.assets.playSound("cry" + pirateShanty);
 			}
 		}
