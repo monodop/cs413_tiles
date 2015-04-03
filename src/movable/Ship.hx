@@ -77,6 +77,26 @@ class Ship extends SimpleMovable {
 		this.maxSpeed = maxSpeed;
 	}
 	
+	/** See variable description */
+	public function getBoatAcceleration():Float{
+		return this.acceleration;
+	}
+	
+	/** See variable description */
+	public function getBreakPower():Float{
+		return this.breakPower;
+	}
+	
+	/** See variable description */
+	public function getMaxAngle():Float{
+		return this.maxAngle;
+	}
+	
+	/** See variable description */
+	public function getMaxSpeed():Float{
+		return this.maxSpeed;
+	}
+	
 	/** Stops the boat from moving, starts slowing down */
 	public function stopMovement(){ 
 		this.arrived = true;

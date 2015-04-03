@@ -48,7 +48,7 @@ class World extends Sprite {
 	private var healthBar:HealthBar;
 	private var energyBar:HealthBar;
 	
-	private var pointCounter:Int = 0;
+	public var pointCounter:Int = 0;
 	
 	private var directionTriangles:Array<Image>;
 	
