@@ -158,7 +158,7 @@ class World extends Sprite {
 			removeMovable(ship);
 			
 			if(ship.deathAnimationStr != null){
-				var explosion:Explosion = new Explosion(ship.deathAnimationStr, 15);
+				var explosion:Explosion = new Explosion(ship.deathAnimationStr, 8);
 					explosion.x = ship.x;
 					explosion.y = ship.y;
 					explosion.rotation = ship.rotation;

@@ -216,10 +216,13 @@ class Ship extends SimpleMovable {
 				bulletList.push(newBullet);
 				world.addMovable(newBullet);
 				
-				var explosion:Explosion = new Explosion("explosions/pirate_cannon_shot_", 20);
-					explosion.x = cannonPos.x;
-					explosion.y = cannonPos.y;
-				this.parent.addChild(explosion);
+				fireVector.normalize().multiply(0.35);
+				var explosionPos = this.parent.getTransformationMatrix(cannon).transformPoint(new Point(cannonPos.x + fireVector.vx, cannonPos.y + fireVector.vy));
+				var explosion:Explosion = new Explosion("explosions/pirate_cannon_shot_", 8);
+					explosion.scaleX = explosion.scaleY = 36;
+					explosion.x = explosionPos.x;
+					explosion.y = explosionPos.y;
+				cannon.addChild(explosion);
 			}
 		}
 	}

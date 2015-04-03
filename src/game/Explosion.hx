@@ -23,8 +23,8 @@ class Explosion extends Sprite
                
 		this.clip.pivotX = this.clip.width / 2.0;
 		this.clip.pivotY = this.clip.height / 2.0;
-		this.clip.scaleX = 1 / 16.0;
-		this.clip.scaleY = 1 / 16.0;
+		this.clip.scaleX = 1 / 24.0;
+		this.clip.scaleY = 1 / 24.0;
 		this.clip.smoothing = 'none';
 		this.clip.loop = false;
 		this.clip.addEventListener(Event.COMPLETE, function() {
