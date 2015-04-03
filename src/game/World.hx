@@ -170,7 +170,7 @@ class World extends Sprite {
 			
 			var pathArray:Array<Point> = new Array<Point>();
 			for(i in 0...4){
-				pathArray.push(new Point(Math.random()*80 + 10, Math.random()*80 + 10));
+				pathArray.push(new Point(Math.random()*60 + 20, Math.random()*60 + 20));
 			}
 			
 			ship.x = pathArray[0].x;

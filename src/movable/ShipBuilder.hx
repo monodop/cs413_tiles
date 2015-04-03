@@ -19,19 +19,19 @@ class ShipBuilder{
 	
 	/* Returns a pirate ship with up to two cannons */
 	public static function getPirateShip(world, cannonMask:Int = 0x3, maxSpeed:Float = 0.0833, maxTurn:Float = 0.0122, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
-		var ship = getSmallShip(world,cannonMask,maxSpeed,maxTurn,turnFix,breakPower,acceleration);
+		var ship = getSmallShip(world,800,cannonMask,maxSpeed,maxTurn,turnFix,breakPower,acceleration);
 		ship.addFlag(FLAG_PIRATE, 18, 12, 18, 12);
 		return ship;
 	}
 	
 	/* Returns a small ship with up to two cannons */
 	public static function getCourrierShip(world, cannonMask:Int = 0x3, maxSpeed:Float = 0.0833, maxTurn:Float = 0.0122, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
-		var ship = getSmallShip(world,cannonMask,maxSpeed,maxTurn,turnFix,breakPower,acceleration);
+		var ship = getSmallShip(world,2500,cannonMask,maxSpeed,maxTurn,turnFix,breakPower,acceleration);
 		ship.addFlag(FLAG_SMALL, 18, 12, 18, 12);
 		return ship;
 	}
 	
-	private static function getSmallShip(world, cannonMask:Int = 0x3, maxSpeed:Float = 0.0833, maxTurn:Float = 0.0122, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
+	private static function getSmallShip(world, fireSpeed:Int = 2500, cannonMask:Int = 0x3, maxSpeed:Float = 0.0833, maxTurn:Float = 0.0122, turnFix:Bool = true, breakPower:Float = 0.980, acceleration:Float = 0.005):PathingShip{
 		var ship = new PathingShip(SHIP_SMALL, world, maxSpeed, maxTurn);
 		ship.setBreakPower( breakPower );
 		ship.setBoatAcceleration( acceleration );
@@ -39,13 +39,13 @@ class ShipBuilder{
 		
 		// Left cannon
 		if(cannonMask & 0x1 != 0){
-			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 4, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 4, 10, 2500);
 			ship.addCannon(cannon, 16, 6);
 		}
 		
 		// Right cannon
 		if(cannonMask & 0x2 != 0){
-			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 4, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 4, 10, 2500);
 			ship.addCannon(cannon, 16, 18);
 		}
 		
@@ -63,25 +63,25 @@ class ShipBuilder{
 		
 		// Front Left cannon
 		if(cannonMask & 1 != 0){
-			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 8, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 8, 10, 2500);
 			ship.addCannon(cannon, 80, 10);
 		}
 		
 		// Front Right cannon
 		if(cannonMask & 2 != 0){
-			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 8, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 8, 10, 2500);
 			ship.addCannon(cannon, 80, 39);
 		}
 		
 		// Back Left cannon
 		if(cannonMask & 4 != 0){
-			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 8, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, Math.PI / 2, Math.PI / 8, 10, 2500);
 			ship.addCannon(cannon, 40, 10);
 		}
 		
 		// Back Right cannon
 		if(cannonMask & 8 != 0){
-			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 8, 10, 1000);
+			var cannon = new Cannon(CANNON_BALL, -Math.PI / 2, Math.PI / 8, 10, 2500);
 			ship.addCannon(cannon, 40, 39);
 		}
 		
