@@ -7,6 +7,7 @@ import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.EnterFrameEvent;
 
+import flash.media.SoundTransform;
 import flash.media.Sound;
 
 import game.World;
@@ -18,6 +19,7 @@ class Game extends MenuState {
 	private var world:World;
 	
 	override function init() {
+		playWater(null);
 		rootSprite.addChild(this);
 		
 		var centerX = Starling.current.stage.stageWidth / 2.0;
@@ -48,6 +50,12 @@ class Game extends MenuState {
 	
 	function enterFrame(event:EnterFrameEvent) {
 		world.update(event);
+	}
+	
+	public function playWater(e:flash.events.Event){
+		var musicChannel = Root.assets.playSound("ocean");
+		musicChannel.addEventListener(flash.events.Event.SOUND_COMPLETE, playWater);
+		musicChannel.soundTransform = new SoundTransform(0.01, 0.01);
 	}
 	
 	override function transitionIn(?callback:Void->Void) { callback(); }

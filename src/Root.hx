@@ -60,16 +60,19 @@ class Root extends Sprite {
 		assets.enqueue("assets/spritesheet.png");
 		assets.enqueue("assets/spritesheet.xml");
 		
-		assets.enqueue("assets/sound/cry.mp3");
+		assets.enqueue("assets/sound/boop.mp3");
+		assets.enqueue("assets/sound/ocean.mp3");
+		assets.enqueue("assets/sound/cry0.mp3");
+		assets.enqueue("assets/sound/cry1.mp3");
 		assets.enqueue("assets/sound/cry2.mp3");
-		assets.enqueue("assets/sound/cry3.mp3");
+		assets.enqueue("assets/sound/explosion.mp3");
 		assets.enqueue("assets/sound/PirateGameAnthem.mp3");
 			
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {
 				startup.removeChild(startup.loadingBitmap);
 				//var menu = new Game(rootSprite);
-				Starling.current.showStats = true;
+				//Starling.current.showStats = true;
 				//menu.start();
 				
 				playMusic(null);
@@ -83,6 +86,6 @@ class Root extends Sprite {
 	public function playMusic(e:flash.events.Event){
 		var musicChannel = Root.assets.playSound("PirateGameAnthem");
 		musicChannel.addEventListener(flash.events.Event.SOUND_COMPLETE, playMusic);
-		musicChannel.soundTransform = new SoundTransform(0.05, 0.05);
+		musicChannel.soundTransform = new SoundTransform(0.01, 0.01);
 	}
 }

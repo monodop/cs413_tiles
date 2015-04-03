@@ -84,9 +84,9 @@ class MainMenu extends MenuState
 	}
 	
 	function up(action:ControlAction) {
-		
+
 		if(action.isActive()) {
-			
+			Root.assets.playSound("boop");
 			if (--selection < 0)
 				selection = numOptions - 1;
 				
@@ -100,7 +100,7 @@ class MainMenu extends MenuState
 	function down(action:ControlAction) {
 		
 		if(action.isActive()) {
-				
+			Root.assets.playSound("boop");	
 			if (++selection >= numOptions)
 				selection = 0;
 				

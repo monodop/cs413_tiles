@@ -223,6 +223,7 @@ class Ship extends SimpleMovable {
 					explosion.x = explosionPos.x;
 					explosion.y = explosionPos.y;
 				cannon.addChild(explosion);
+				Root.assets.playSound("explosion");
 			}
 		}
 	}
