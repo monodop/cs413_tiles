@@ -1,6 +1,8 @@
 package menus;
 
 import game.World;
+import starling.animation.Tween;
+import starling.core.Starling;
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.Touch;
@@ -141,11 +143,35 @@ class UpgradeMenu extends MenuState
 	
 	function closeMenu(action:ControlAction) {
 		if (action.isActive()) {
-			world.closeMenu();
 			this.stop();
-			this.removeFromParent();
-			this.dispose();
 		}
+	}
+	
+	override function deinit() {
+		world.closeMenu();
+		this.removeFromParent();
+		this.dispose();
+	}
+	
+	private override function transitionIn(?callback:Void->Void) {
+		this.y = Starling.current.stage.stageHeight;
+		
+		var tween = new Tween(this, 1.0, "easeInOut");
+		tween.animate("y", 0);
+		tween.onComplete = function() {
+			callback();
+		}
+		Starling.juggler.add(tween);
+	}
+	private override function transitionOut(?callback:Void->Void) {
+		this.y = 0;
+		
+		var tween = new Tween(this, 1.0, "easeInOut");
+		tween.animate("y", Starling.current.stage.stageHeight);
+		tween.onComplete = function() {
+			callback();
+		}
+		Starling.juggler.add(tween);
 	}
 	
 }

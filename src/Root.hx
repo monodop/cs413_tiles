@@ -44,6 +44,7 @@ class Root extends Sprite {
 		controls.registerAction("break", Keyboard.Z);
 		
 		controls.registerAction("menu", Keyboard.ESCAPE);
+		controls.registerAction("retire", Keyboard.R);
 		
 		controls.registerAction("quadtreevis", Keyboard.F1);
 		

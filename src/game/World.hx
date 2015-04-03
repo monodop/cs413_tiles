@@ -3,6 +3,7 @@ package game;
 import colliders.*;
 import flash.geom.Rectangle;
 import game.tilemap.Tilemap;
+import menus.GameOverMenu;
 import menus.MenuState;
 import menus.QuadTreeVis;
 import menus.UpgradeMenu;
@@ -261,15 +262,17 @@ class World extends Sprite {
 	public function awake() {
 		Root.controls.hook("quadtreevis", "quadTreeVis", quadTreeVis);
 		Root.controls.hook("menu", "openMenu", openMenu);
+		Root.controls.hook("retire", "retire", retire);
 		Starling.current.stage.addEventListener(TouchEvent.TOUCH, onTouch);
 	}
 	public function sleep() {
 		Root.controls.unhook("quadtreevis", "quadTreeVis");
 		Root.controls.unhook("menu", "openMenu");
+		Root.controls.unhook("retire", "retire");
 		Starling.current.stage.removeEventListener(TouchEvent.TOUCH, onTouch);
 	}
 	
-	public function openMenu(action:ControlAction) {
+	function openMenu(action:ControlAction) {
 		
 		if(action.isActive()) {
 			var menu = new UpgradeMenu(menustate.rootSprite, this);
@@ -277,6 +280,23 @@ class World extends Sprite {
 			
 			menustate.pause();
 		}
+		
+	}
+	
+	function retire(action:ControlAction) {
+		
+		if (action.isActive()) {
+			gameOver();
+		}
+		
+	}
+	
+	public function gameOver() {
+		
+		var menu = new GameOverMenu(menustate.rootSprite, this, menustate);
+		menu.start();
+		
+		menustate.pause();
 		
 	}
 	
