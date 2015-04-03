@@ -50,7 +50,7 @@ class GameOverMenu extends MenuState
 		GAMEOVER.hAlign = "left";
 		addChild(GAMEOVER);
 		
-		scoreField = new TextField(200, 400, "Score: " + world.pointCounter, BitmapFont.MINI, 15, 0x000000);
+		scoreField = new TextField(200, 400, "Score: " + world.scoreCounter, BitmapFont.MINI, 15, 0x000000);
 		scoreField.x = 190;
 		scoreField.y = 120;
 		scoreField.vAlign = "top";
