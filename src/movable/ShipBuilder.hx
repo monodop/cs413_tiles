@@ -102,12 +102,12 @@ class ShipBuilder{
 	public function generateLargeShip(world, difficulty:Int){
 		var maxTurn 	 = 0.0051 + difficulty * (0.0061 - 0.0051) / 5;
 		var maxSpeed 	 = 0.075 + difficulty * (0.085 - 0.075) / 5;
-		var ship = getLargeEnglishShip(world, 31, maxSpeed, maxTurn, true, breakPower, acceleration);
+		var ship = getLargeEnglishShip(world, 31, maxSpeed, maxTurn, true, 0.980, 0.005);
 	}
 	
 	public function generateSmallShip(world, difficulty:Int){
 		var maxTurn 	 = 0.0051 + difficulty * (0.0061 - 0.0051) / 5;
 		var maxSpeed 	 = 0.075 + difficulty * (0.085 - 0.075) / 5;
-		var ship = getLargeEnglishShip(world, 3, maxSpeed, maxTurn, true, breakPower, acceleration);
+		var ship = getLargeEnglishShip(world, 3, maxSpeed, maxTurn, true, 0.980, 0.005);
 	}
 }
